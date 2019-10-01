@@ -64,11 +64,10 @@ Others      | ...                                                          | sup
 
   4. Third Normal Form:
 
-    Apps (*Name, #Category_Id, #Rating_Id, #Price_Type_Id, #Age_Rating_Id, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
+    Apps (*Name, #Category_Id, #Price_Type_Id, #Age_Rating_Id, Rating, N_of_Reviews, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
     Genres (*Id, Name)
     Apps_Genres (*#App_Name, *#Genre_Id)
     Category (*Id, Name)
-    Rating (*Id, Value, N_of_Reviews)
     Price_Type (*Id, Type)
     Age_Rating (*Id, Age)
 
@@ -104,15 +103,14 @@ Others      | ...                                                          | sup
 
   1. With the same Primary Key:
 
-    Table A = Apps (*Name, #Category_Id, #Rating_Id, #Price_Type_Id, #Age_Rating_Id, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
+    Table A = Apps (*Name, #Category_Id, #Price_Type_Id, #Age_Rating_Id, Rating, N_of_Reviews, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
     Table B = Apps (*Name)
 
-    Table A + B = Apps (*Name, #Category_Id, #Rating_Id, #Price_Type_Id, #Age_Rating_Id, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
+    Table A + B = Apps (*Name, #Category_Id, #Price_Type_Id, #Age_Rating_Id, Rating, N_of_Reviews, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
 
     Genres (*Id, Name)
     Apps_Genres (*#App_Name, *#Genre_Id)
     Category (*Id, Name)
-    Rating (*Id, Value, N_of_Reviews)
     Price_Type (*Id, Type)
     Age_Rating (*Id, Age)
     Reviews (*Id, #App_Name, #Sentiment_Type_Id, Translated_Review, Sentiment_Polarity, Sentiment_Subjectivity)
@@ -124,10 +122,9 @@ Others      | ...                                                          | sup
 
   4. Final Result:
 
-    Apps (*Name, #Category_Id, #Rating_Id, #Price_Type_Id, #Age_Rating_Id, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
+    Apps (*Name, #Category_Id, #Price_Type_Id, #Age_Rating_Id, Rating, N_of_Reviews, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
     Reviews (*Id, #App_Name, #Sentiment_Type_Id, Translated_Review, Sentiment_Polarity, Sentiment_Subjectivity)
     Apps_Genres (*#App_Name, *#Genre_Id)
-    Rating (*Id, Value, N_of_Reviews)
     Sentiment_Type (*Id, Type)
     Price_Type (*Id, Type)
     Age_Rating (*Id, Age)
