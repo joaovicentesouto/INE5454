@@ -130,3 +130,26 @@ Others      | ...                                                          | sup
     Age_Rating (*Id, Age)
     Category (*Id, Name)
     Genres (*Id, Name)
+
+### Apple Store
+
+#### applestore.csv file:
+
+  1. Not Normalized:
+
+    (Id, Track_name, Size_Bytes, (Currency), Price, Rating_Count_Tot, Rating_Count_Ver, User_Rating, User_Rating_Ver, Ver, Cont_Rating, (Prime_Genre), Sup_Devices.num, IpadSc_Urls.num, Lang.num, Vpp_Lic)
+
+  1.5. Mapping Names:
+
+    Track_Name -> Name
+    Size_Bytes -> Size
+    Rating_Count_Tot -> Rating_Amount
+    User_Rating -> Rating
+    Ver -> Version
+    Prime_Genre -> Category
+    Sup_Devices.num -> N_of_Suported_Devices
+    Lang.num -> N_Available_Languages
+    Vpp_Lic -> Volume_Purchase_Program
+    
+    
+    To be continued...
