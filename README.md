@@ -137,7 +137,7 @@ Others      | ...                                                          | sup
 
   1. Not Normalized:
 
-    (*Id, Name, Size, (Currency), Price, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, Age_Rating, (Genre), N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+    (*Id, Name, Size, (Currency), Price, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, (Age_Rating), (Genre), N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
 
   1.5. Mapping Names:
 
@@ -160,15 +160,22 @@ Others      | ...                                                          | sup
 
   2. First Normal Form:
 
-    Apps (*Id, Name, Size, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, #Age_Id, #Genre_Id, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+    Apps (*Id, Name, Size, #Currency_Id, Price, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, #Age_Id, #Genre_Id, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
     Genres (*Id, Genre)
     Currencies (*Id, Currency)
-    Prices (*#App_Id, *#Currency_Id, Price)
     Age_Ratings (*Id, Age_Rating)
 
   3. Second Normal Form = First Normal Form
 
-  4. Third Normal Form = Second Normal Form
+  4. Third Normal Form:
+  
+    (*Id, #Currency_Id) -> Price
+    
+    Apps (*Id, Name, Size, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, #Age_Id, #Genre_Id, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+    Genres (*Id, Genre)
+    Currencies (*Id, Currency)
+    Age_Ratings (*Id, Age_Rating)
+    Prices (*#App_Id, *#Currency_Id, Price)
 
   5. Fourth Normal Form = Third Normal Form
 
@@ -199,20 +206,26 @@ Others      | ...                                                          | sup
 
   1. Not Normalized:
 
-    (*Review_Id, (Id), Review)
+    (*Id, (*Review_Id, Review))
 
   1.5. Mapping Names:
 
-    Review_Id -> codigo_review
     Id -> id
+    Review_Id -> codigo_review
     Review -> review
 
   2. First Normal Form:
 
     Apps (*Id)
-    Reviews (*Id, #App_Id, Review)
+    Reviews (*#App_Id, *Review_Id, Review)
 
-  3. Second Normal Form = First Normal Form
+  3. Second Normal Form:
+  
+    (*Review_Id) -> Review
+    
+    Apps (*Id)
+    Reviews (*Review_Id, Review)
+    AppReviews (*#App_Id, *#Review_Id)
 
   4. Third Normal Form = Second Normal Form
 
@@ -232,7 +245,8 @@ Others      | ...                                                          | sup
     Currencies (*Id, Currency)
     Prices (*#App_Id, *#Currency_Id, Price)
     Age_Ratings (*Id, Age_Rating)
-    Reviews (*Id, #App_Id, Review)
+    Reviews (*Review_Id, Review)
+    AppReviews (*#App_Id, *#Review_Id)
 
   2. With Contained Key = With the same Primary Key
 
@@ -245,6 +259,7 @@ Others      | ...                                                          | sup
     Currencies (*Id, Currency)
     Prices (*#App_Id, *#Currency_Id, Price)
     Age_Ratings (*Id, Age_Rating)
-    Reviews (*Id, #App_Id, Review)
+    Reviews (*Review_Id, Review)
+    AppReviews (*#App_Id, *#Review_Id)
 
 ### Shopify Store
