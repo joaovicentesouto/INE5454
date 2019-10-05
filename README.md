@@ -9,7 +9,7 @@ The following sections present the data used in this project.
 
 We will work over the following three datasets to create the polyglot persistence application:
 - [Google Play Store Apps](https://www.kaggle.com/lava18/google-play-store-apps)
-- [Mobile App Store](https://www.kaggle.com/ramamet4/app-store-apple-data-set-10k-apps)
+- [Mobile App Store (Apple)](https://www.kaggle.com/ramamet4/app-store-apple-data-set-10k-apps)
 - [Shopify app store](https://www.kaggle.com/usernam3/shopify-app-store)
 
 ## Raw
@@ -25,7 +25,7 @@ Language    | ...                                                          | lan
 Size        | Size                                                         | size_bytes                                                            | ...
 Download    | Installs                                                     | ...                                                                   | ...
 Price       | TypePaid <br>Price</br>                                      | currency <br>price</br>                                               | pricing_hint <br>pricing_plan_id</br> feature(pricing_plan) <br>price</br> title(pricing_plan)
-Version     | Last Updated <br>Current Ver</br> Android Ver               | ver                                                                   | ...
+Version     | Last Updated <br>Current Ver</br> Android Ver                | ver                                                                   | ...
 Developer   | ...                                                          | ...                                                                   | developer <br>developer_link</br>
 Sentiment   | Sentiment <br>Sentiment_Polarity</br> Sentiment_Subjectivity | ...                                                                   | ...
 Others      | ...                                                          | sup_devices.num <br>ipadSc_urls.num</br> vpp_lic                      | icon <br>url</br>
@@ -133,23 +133,118 @@ Others      | ...                                                          | sup
 
 ### Apple Store
 
-#### applestore.csv file:
+#### AppleStore.csv file:
 
   1. Not Normalized:
 
-    (Id, Track_name, Size_Bytes, (Currency), Price, Rating_Count_Tot, Rating_Count_Ver, User_Rating, User_Rating_Ver, Ver, Cont_Rating, (Prime_Genre), Sup_Devices.num, IpadSc_Urls.num, Lang.num, Vpp_Lic)
+    (*Id, Name, Size, (Currency), Price, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, Age_Rating, (Genre), N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
 
   1.5. Mapping Names:
 
-    Track_Name -> Name
-    Size_Bytes -> Size
-    Rating_Count_Tot -> Rating_Amount
-    User_Rating -> Rating
-    Ver -> Version
-    Prime_Genre -> Category
-    Sup_Devices.num -> N_of_Suported_Devices
-    Lang.num -> N_Available_Languages
-    Vpp_Lic -> Volume_Purchase_Program
-    
-    
-    To be continued...
+    Id -> id
+    Name -> track_name
+    Size -> size_bytes
+    Currency -> currency
+    Price -> price
+    N_of_Rating -> rating_count_tot
+    N_of_Rating_Curr_Version -> rating_count_ver
+    Rating -> user_rating
+    Rating_Curr_Version -> user_rating_ver
+    Version -> ver
+    Age_Rating -> cont_rating
+    Genre -> prime_genre
+    N_of_Supported_Devices -> sup_devices.num
+    N_of_ipad_URLs -> ipadSc_urls.num
+    N_of_Available_Languages -> lang.num
+    Belongs_To_Volume_Purchase_Program -> vpp_lic
+
+  2. First Normal Form:
+
+    Apps (*Id, Name, Size, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, #Age_Id, #Genre_Id, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+    Genres (*Id, Genre)
+    Currencies (*Id, Currency)
+    Prices (*#App_Id, *#Currency_Id, Price)
+    Age_Ratings (*Id, Age_Rating)
+
+  3. Second Normal Form = First Normal Form
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### appleStore_description.csv file:
+
+  1. Not Normalized:
+
+    (*Id, Name, Size, Description)
+
+  1.5. Mapping Names:
+
+    Id -> id
+    Name -> track_name
+    Size -> size_bytes
+    Description -> app_desc
+
+  2. First Normal Form:
+
+    Apps (*Id, Name, Size, Description)
+
+  3. Second Normal Form = First Normal Form
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### AppleStore_Reviews.csv file:
+
+  1. Not Normalized:
+
+    (*Review_Id, (Id), Review)
+
+  1.5. Mapping Names:
+
+    Review_Id -> codigo_review
+    Id -> id
+    Review -> review
+
+  2. First Normal Form:
+
+    Apps (*Id)
+    Reviews (*Id, #App_Id, Review)
+
+  3. Second Normal Form = First Normal Form
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### Integration (Normalization of Datasets 1 + 2 + 3):
+
+  1. With the same Primary Key:
+
+    Table A = Apps (*Id, Name, Size, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, #Age_Id, #Genre_Id, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+    Table B = Apps (*Id, Name, Size, Description)
+    Table C = Apps (*Id)
+
+    Table A + B + C = Apps (*Id, Name, Size, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, #Age_Id, #Genre_Id, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Description)
+
+    Genres (*Id, Genre)
+    Currencies (*Id, Currency)
+    Prices (*#App_Id, *#Currency_Id, Price)
+    Age_Ratings (*Id, Age_Rating)
+    Reviews (*Id, #App_Id, Review)
+
+  2. With Contained Key = With the same Primary Key
+
+  3. Third Normal Form = With the same Primary Key
+
+  4. Final Result:
+
+    Apps (*Id, Name, Size, Version, Description, #Genre_Id, #Age_Id, Rating, Rating_Curr_Version, N_of_Rating, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+    Genres (*Id, Genre)
+    Currencies (*Id, Currency)
+    Prices (*#App_Id, *#Currency_Id, Price)
+    Age_Ratings (*Id, Age_Rating)
+    Reviews (*Id, #App_Id, Review)
+
+### Shopify Store
