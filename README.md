@@ -263,3 +263,183 @@ Others      | ...                                                          | sup
     AppReviews (*#App_Id, *#Review_Id)
 
 ### Shopify Store
+
+#### apps.csv file:
+
+  1. Not Normalized:
+
+    (*Id, Url, Title, Tagline, Developer, Developer link, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint)
+
+  1.5. Mapping Names:
+
+    Title -> Name
+    Developer link -> Developer_Link
+    Price_Hint -> Free_Trial_Days
+
+  2. First Normal Form:
+
+    Apps (*Id, Url, Title, Tagline, Developer, Developer link, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint)
+
+  3. Second Normal Form == First Normal Form
+
+  4. Third Normal Form:
+
+    Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint)
+    Developers (*Id, Name, Link)
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### apps_categories.csv file:
+
+  1. Not Normalized:
+
+    (*App_Id, *Category_Id)
+
+  2. First Normal Form:
+
+    Apps_Categories (*App_Id, *Category_Id)
+
+  3. Second Normal Form == First Normal Form
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### categories.csv file:
+
+  1. Not Normalized:
+
+    (*Id, Title)
+
+  1.5. Mapping Names:
+
+    Title -> Name
+
+  2. First Normal Form:
+
+    Categories (*Id, Name)
+
+  3. Second Normal Form == First Normal Form
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### key_benefits.csv file:
+
+  1. Not Normalized:
+
+    (*App_Id, Title, Description)
+
+  1.5. Mapping Names:
+
+    Title -> Benefit_Name
+    Description -> Benefit_Description
+
+  2. First Normal Form:
+
+    Apps (*Id, Benefit_Name, Benefit_Description)
+
+  3. Second Normal Form == First Normal Form
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### pricing_plans.csv file:
+
+  1. Not Normalized:
+
+    (*App_Id, (*Id, Title), price)
+
+  1.5. Mapping Names:
+
+    Title -> Name
+
+  2. First Normal Form:
+
+    Apps (*Id, Price)
+    Price_plans (*Id, *#App_Id, Name)
+
+  3. Second Normal Form:
+
+    Apps (*Id, Price)
+    Price_plans (*Id, Name)
+    Apps_Price_plans (*App_Id, *#Price_Plans_Id)
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### pricing_plan_features.csv file:
+
+  1. Not Normalized:
+
+    (*App_Id, *Pricing_Plan_Id, Feature)
+
+  2. First Normal Form:
+
+    Apps_Pricing_Plans_Features (*App_Id, *Pricing_Plan_Id, Feature)
+
+  3. Second Normal Form == First Normal Form
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Formm
+
+#### reviews.csv file:
+
+  1. Not Normalized:
+
+    (*App_Id, Author, Body, Rating, Helpful_Count, Posted_At, Developer_Reply, Developer_Reply_Posted_At)
+
+  1.5. Mapping Names:
+
+    Body -> Content
+    Posted_At -> Post_Date
+    Developer_Reply_Posted_At -> Developer_Reply_Post_Date
+
+  2. First Normal Form:
+
+    Reviews (*App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
+
+  3. Second Normal Form = First Normal Form
+
+  4. Third Normal Form = Second Normal Form
+
+  5. Fourth Normal Form = Third Normal Form
+
+#### Integration (Normalization of Datasets 1 + 2 + 3 + 4 + 5 + 6 + 7):
+
+  1. With the same Primary Key:
+
+    Table A = Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint)
+    Table B = Apps (*Id, Benefit_Name, Benefit_Description)
+    Table C = Apps (*Id, Price)
+
+    Table A + B + C = Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint, Benefit_Name, Benefit_Description, Price)
+    
+    Table D = Apps_Price_plans (*App_Id, *#Price_Plans_Id)
+    Table E = Apps_Pricing_Plans_Features (*App_Id, *Pricing_Plan_Id, Feature)
+    
+    Table D + E = Apps_Price_plans (*App_Id, *#Price_Plans_Id, Feature)
+
+    Developers (*Id, Name, Link)
+    Categories (*Id, Name)
+    Apps_Categories (*#App_Id, *#Category_Id)
+    Price_plans (*Id, Name)
+    Reviews (*#App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
+
+  2. With Contained Key = With the same Primary Key
+
+  3. Third Normal Form = With the same Primary Key
+
+  4. Final Result:
+
+    Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint, Benefit_Name, Benefit_Description, Price)
+    Reviews (*#App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
+    Developers (*Id, Name, Link)
+    Price_plans (*Id, Name)
+    Categories (*Id, Name)
+    Apps_Categories (*#App_Id, *#Category_Id)
+    Apps_Price_plans (*App_Id, *#Price_Plans_Id, Feature)
