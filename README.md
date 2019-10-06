@@ -448,7 +448,23 @@ Others      | ...                                                          | sup
 
   1. With the same Primary Key:
 
-    Developers (*Id, Name, Link)
+    (Apple)   Table A = Apps (*Id, Name, Size, Version, Description, #Genre_Id, #Age_Id, Rating, Rating_Curr_Version, N_of_Rating, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+    (Shopify) Table B = Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price)
+    (Google)  Table C = Apps (*Id, Name, #Category_Id, #Price_Type_Id, #Age_Rating_Id, Rating, N_of_Reviews, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
+    
+    Equals Atributtes:
+    
+      Reviews_Count = N_of_Rating = N_of_Reviews
+      Curr_Version_Available = Version
+      Age_Rating_Id = Age_Id
+      
+    Atributtes Manipulations:
+    
+      At C table the key attribute is the app name but it is possible to create an Id related to each name and make this Id as a Primary Key.
+      However, it's necessary to verify if there is an intersection between the apps name of C table and the same in other tables.
+      In this case, it's possible to reuse an existing key.
+      
+    Table A + B + C = Apps (*Id, #Category_Id, #Genre_Id, #Age_Rating_Id, #Developer_Id, #Price_Type_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
 
   2. With Contained Key = With the same Primary Key
 
