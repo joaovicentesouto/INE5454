@@ -225,7 +225,7 @@ Others      | ...                                                          | sup
     
     Apps (*Id)
     Reviews (*Review_Id, Review)
-    AppReviews (*#App_Id, *#Review_Id)
+    Apps_Reviews (*#App_Id, *#Review_Id)
 
   4. Third Normal Form = Second Normal Form
 
@@ -246,7 +246,7 @@ Others      | ...                                                          | sup
     Prices (*#App_Id, *#Currency_Id, Price)
     Age_Ratings (*Id, Age_Rating)
     Reviews (*Review_Id, Review)
-    AppReviews (*#App_Id, *#Review_Id)
+    Apps_Reviews (*#App_Id, *#Review_Id)
 
   2. With Contained Key = With the same Primary Key
 
@@ -260,7 +260,7 @@ Others      | ...                                                          | sup
     Prices (*#App_Id, *#Currency_Id, Price)
     Age_Ratings (*Id, Age_Rating)
     Reviews (*Review_Id, Review)
-    AppReviews (*#App_Id, *#Review_Id)
+    Apps_Reviews (*#App_Id, *#Review_Id)
 
 ### Shopify Store
 
@@ -532,8 +532,21 @@ Others      | ...                                                          | sup
     Apps_Categories (*#App_Id, *#Category_Id)
 
   1.5. Intermediate Result:
+    
+    Removed Atributtes from Apps:
+    
+      #Category_Id
+      #Genre_Id
+      #Price_Plan_Id
+      Price
+    
+    Removed Atributtes from Reviews:
+    
+      #App_Id
+      #App_Name
 
-    Apps (*Id, #Category_Id, #Genre_Id, #Age_Rating_Id, #Developer_Id, #Price_Plan_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+    Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+
     Age_Ratings (*Id, Age_Rating)
     Developers (*Id, Name, Link)
     Sentiment_Type (*Id, Type)
@@ -541,9 +554,11 @@ Others      | ...                                                          | sup
     Price_plans (*Id, Name)
     Categories (*Id, Name)
     Genres (*Id, Genre)
-    Reviews (*Id, #App_Id, #App_name, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+
+    Reviews (*Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+
     Apps_Genres (*#App_Id, *#Genre_Id)
-    AppReviews (*#App_Id, *#Review_Id)
+    Apps_Reviews (*#App_Id, *#Review_Id)
     Prices (*#App_Id, *#Currency_Id, Price)
     Apps_Categories (*#App_Id, *#Category_Id)
     Apps_Price_plans (*App_Id, *#Price_Plan_Id, Feature)
