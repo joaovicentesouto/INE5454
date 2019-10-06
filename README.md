@@ -365,7 +365,7 @@ Others      | ...                                                          | sup
 
     Apps (*Id, Price)
     Price_plans (*Id, Name)
-    Apps_Price_plans (*App_Id, *#Price_Plans_Id)
+    Apps_Price_plans (*#App_Id, *#Price_Plans_Id)
 
   4. Third Normal Form = Second Normal Form
 
@@ -419,10 +419,10 @@ Others      | ...                                                          | sup
 
     Table A + B + C = Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint, Benefit_Name, Benefit_Description, Price)
     
-    Table D = Apps_Price_plans (*App_Id, *#Price_Plans_Id)
+    Table D = Apps_Price_plans (*#App_Id, *#Price_Plans_Id)
     Table E = Apps_Pricing_Plans_Features (*App_Id, *Pricing_Plan_Id, Feature)
     
-    Table D + E = Apps_Price_plans (*App_Id, *#Price_Plans_Id, Feature)
+    Table D + E = Apps_Price_plans (*#App_Id, *#Price_Plans_Id, Feature)
 
     Developers (*Id, Name, Link)
     Categories (*Id, Name)
@@ -442,4 +442,4 @@ Others      | ...                                                          | sup
     Price_plans (*Id, Name)
     Categories (*Id, Name)
     Apps_Categories (*#App_Id, *#Category_Id)
-    Apps_Price_plans (*App_Id, *#Price_Plans_Id, Feature)
+    Apps_Price_plans (*#App_Id, *#Price_Plans_Id, Feature)
