@@ -391,7 +391,7 @@ Others      | ...                                                          | sup
 
   1. Not Normalized:
 
-    (*App_Id, Author, Body, Rating, Helpful_Count, Posted_At, Developer_Reply, Developer_Reply_Posted_At)
+    (*Id, App_Id, Author, Body, Rating, Helpful_Count, Posted_At, Developer_Reply, Developer_Reply_Posted_At)
 
   1.5. Mapping Names:
 
@@ -401,7 +401,7 @@ Others      | ...                                                          | sup
 
   2. First Normal Form:
 
-    Reviews (*App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
+    Reviews (*Id, App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
 
   3. Second Normal Form = First Normal Form
 
@@ -428,7 +428,7 @@ Others      | ...                                                          | sup
     Categories (*Id, Name)
     Apps_Categories (*#App_Id, *#Category_Id)
     Price_plans (*Id, Name)
-    Reviews (*#App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
+    Reviews (*Id, #App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
 
   2. With Contained Key = With the same Primary Key
 
@@ -437,7 +437,7 @@ Others      | ...                                                          | sup
   4. Final Result:
 
     Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price)
-    Reviews (*#App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
+    Reviews (*Id, #App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
     Developers (*Id, Name, Link)
     Price_plans (*Id, Name)
     Categories (*Id, Name)
