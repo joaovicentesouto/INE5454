@@ -452,13 +452,13 @@ Others      | ...                                                          | sup
     (Shopify) Table B = Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price)
     (Google)  Table C = Apps (*Id, Name, #Category_Id, #Price_Type_Id, #Age_Rating_Id, Rating, N_of_Reviews, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
     
-    Equals Atributtes:
+    Equals Attributes:
     
       Reviews_Count = N_of_Rating = N_of_Reviews
       Curr_Version_Available = Version
       Age_Rating_Id = Age_Id
       
-    Atributtes Manipulations:
+    Attributes Manipulations:
     
       At C table the key attribute is the app name but it is possible to create an Id related to each name and make this Id as a Primary Key.
       However, it's necessary to verify if there is an intersection between the apps name of C table and the same in other tables.
@@ -471,7 +471,7 @@ Others      | ...                                                          | sup
     (Apple)   Table G = Reviews (*Review_Id, Review)
     (Shopify) Table H = Reviews (*Id, #App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
     
-    Equals Atributtes:
+    Equals Attributes:
     
       Id = Review_Id
       Review = Content = Translated_Review
@@ -482,7 +482,7 @@ Others      | ...                                                          | sup
     (Google) Table D = Genres (*Id, Name)
     (Apple)  Table E = Genres (*Id, Genre)
     
-    Equals Atributtes:
+    Equals Attributes:
     
       Genre = Name
       
@@ -492,7 +492,7 @@ Others      | ...                                                          | sup
     (Apple)  Table I = Age_Ratings (*Id, Age_Rating)
     (Google) Table J = Age_Rating (*Id, Age)
     
-    Equals Atributtes:
+    Equals Attributes:
     
       Age_Rating = Age
       
@@ -502,7 +502,7 @@ Others      | ...                                                          | sup
     (Google)  Table N = Price_Type (*Id, Type)
     (Shopify) Table O = Price_plans (*Id, Name)
     
-    Equals Atributtes:
+    Equals Attributes:
     
       Type = Name
       
@@ -517,7 +517,7 @@ Others      | ...                                                          | sup
     
     Table K = Apps_Genres (*#App_Name, *#Genre_Id)
     
-    Atributtes Manipulations:
+    Attributes Manipulations:
     
       Uses the app Id, not its name.
       
@@ -528,7 +528,7 @@ Others      | ...                                                          | sup
     Sentiment_Type (*Id, Type)
     Currencies (*Id, Currency)
     Prices (*#App_Id, *#Currency_Id, Price)
-    Apps_Price_plans (*App_Id, *#Price_Plans_Id, Feature)
+    Apps_Price_plans (*#App_Id, *#Price_Plans_Id, Feature)
     Apps_Categories (*#App_Id, *#Category_Id)
 
   1.5. Intermediate Result:
@@ -544,6 +544,11 @@ Others      | ...                                                          | sup
 
       #App_Id
       #App_Name
+    
+    Included Attributes in Prices due to removal of Price from Apps:
+
+      #Price_Plan_Id
+
 
     Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
     Reviews (*Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
@@ -556,14 +561,44 @@ Others      | ...                                                          | sup
     Genres (*Id, Genre)
     Apps_Genres (*#App_Id, *#Genre_Id)
     Apps_Reviews (*#App_Id, *#Review_Id)
-    Prices (*#App_Id, *#Currency_Id, Price)
     Apps_Categories (*#App_Id, *#Category_Id)
-    Apps_Price_plans (*App_Id, *#Price_Plan_Id, Feature)
+    Apps_Price_plans (*#App_Id, *#Price_Plan_Id, Feature)
+    Prices (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Price)
 
-  2. With Contained Key = With the same Primary Key
+  2. With Contained Key
+  
+    Table A = Apps_Price_plans (*#App_Id, *#Price_Plan_Id, Feature)
+    Table B = Prices (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Price)
+    
+    Table A + B = Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
+
+    Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+    Reviews (*Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+    Age_Ratings (*Id, Age_Rating)
+    Developers (*Id, Name, Link)
+    Sentiment_Type (*Id, Type)
+    Currencies (*Id, Currency)
+    Price_plans (*Id, Name)
+    Categories (*Id, Name)
+    Genres (*Id, Genre)
+    Apps_Genres (*#App_Id, *#Genre_Id)
+    Apps_Reviews (*#App_Id, *#Review_Id)
+    Apps_Categories (*#App_Id, *#Category_Id)
 
   3. Third Normal Form = With the same Primary Key
 
   4. Final Result:
 
-    Apps_Price_plans (*#App_Id, *#Price_Plans_Id, Feature)
+    Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+    Reviews (*Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+    Age_Ratings (*Id, Age_Rating)
+    Developers (*Id, Name, Link)
+    Sentiment_Type (*Id, Type)
+    Currencies (*Id, Currency)
+    Price_plans (*Id, Name)
+    Categories (*Id, Name)
+    Genres (*Id, Genre)
+    Apps_Genres (*#App_Id, *#Genre_Id)
+    Apps_Reviews (*#App_Id, *#Review_Id)
+    Apps_Categories (*#App_Id, *#Category_Id)
+    Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
