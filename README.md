@@ -585,7 +585,7 @@ Others      | ...                                                          | sup
     Apps_Reviews (*#App_Id, *#Review_Id)
     Apps_Categories (*#App_Id, *#Category_Id)
 
-  3. Third Normal Form = With the same Primary Key
+  3. Third Normal Form = With Contained Key
 
   4. Final Result:
 
