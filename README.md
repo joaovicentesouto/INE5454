@@ -465,6 +465,88 @@ Others      | ...                                                          | sup
       In this case, it's possible to reuse an existing key.
       
     Table A + B + C = Apps (*Id, #Category_Id, #Genre_Id, #Age_Rating_Id, #Developer_Id, #Price_Type_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+    
+    
+    (Google)  Table F = Reviews (*Id, #App_Name, #Sentiment_Type_Id, Translated_Review, Sentiment_Polarity, Sentiment_Subjectivity)
+    (Apple)   Table G = Reviews (*Review_Id, Review)
+    (Shopify) Table H = Reviews (*Id, #App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
+    
+    Equals Atributtes:
+    
+      Id = Review_Id
+      Review = Content = Translated_Review
+      
+    Table F + G + H = Reviews (*Id, #App_Id, #App_name, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, #Sentiment_Type_Id, Sentiment_Polarity, Sentiment_Subjectivity)
+    
+    
+    (Google) Table D = Genres (*Id, Name)
+    (Apple)  Table E = Genres (*Id, Genre)
+    
+    Equals Atributtes:
+    
+      Genre = Name
+      
+    Table D + E = Genres (*Id, Genre)
+    
+    
+    (Apple)  Table I = Age_Ratings (*Id, Age_Rating)
+    (Google) Table J = Age_Rating (*Id, Age)
+    
+    Equals Atributtes:
+    
+      Age_Rating = Age
+      
+    Table I + J = Age_Ratings (*Id, Age_Rating)
+    
+    
+    (Google)  Table N = Price_Type (*Id, Type)
+    (Shopify) Table O = Price_plans (*Id, Name)
+    
+    Equals Atributtes:
+    
+      Type = Name
+      
+    Table N + O = Price_plans (*Id, Name)
+    
+    
+    (Shopify) Table L = Categories (*Id, Name)
+    (Google)  Table M = Category (*Id, Name)
+      
+    Table L + M = Categories (*Id, Name))
+    
+    
+    Table K = Apps_Genres (*#App_Name, *#Genre_Id)
+    
+    Atributtes Manipulations:
+    
+      Uses the app Id, not its name.
+      
+    Table K = Apps_Genres (*#App_Id, *#Genre_Id)
+    
+    AppReviews (*#App_Id, *#Review_Id)
+    Developers (*Id, Name, Link)
+    Sentiment_Type (*Id, Type)
+    Currencies (*Id, Currency)
+    Prices (*#App_Id, *#Currency_Id, Price)
+    Apps_Price_plans (*App_Id, *#Price_Plans_Id, Feature)
+    Apps_Categories (*#App_Id, *#Category_Id)
+
+  1.5. Intermediate Result:
+
+    Apps (*Id, #Category_Id, #Genre_Id, #Age_Rating_Id, #Developer_Id, #Price_Plan_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+    Age_Ratings (*Id, Age_Rating)
+    Developers (*Id, Name, Link)
+    Sentiment_Type (*Id, Type)
+    Currencies (*Id, Currency)
+    Price_plans (*Id, Name)
+    Categories (*Id, Name)
+    Genres (*Id, Genre)
+    Reviews (*Id, #App_Id, #App_name, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+    Apps_Genres (*#App_Id, *#Genre_Id)
+    AppReviews (*#App_Id, *#Review_Id)
+    Prices (*#App_Id, *#Currency_Id, Price)
+    Apps_Categories (*#App_Id, *#Category_Id)
+    Apps_Price_plans (*App_Id, *#Price_Plan_Id, Feature)
 
   2. With Contained Key = With the same Primary Key
 
