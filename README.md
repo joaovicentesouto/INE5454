@@ -278,13 +278,13 @@ Others      | ...                                                          | sup
 
   2. First Normal Form:
 
-    Apps (*Id, Url, Title, Tagline, Developer, Developer link, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint)
+    Apps (*Id, Url, Name, Tagline, Developer, Developer_Link, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days)
 
   3. Second Normal Form == First Normal Form
 
   4. Third Normal Form:
 
-    Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint)
+    Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days)
     Developers (*Id, Name, Link)
 
   5. Fourth Normal Form = Third Normal Form
@@ -413,11 +413,11 @@ Others      | ...                                                          | sup
 
   1. With the same Primary Key:
 
-    Table A = Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint)
+    Table A = Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days)
     Table B = Apps (*Id, Benefit_Name, Benefit_Description)
     Table C = Apps (*Id, Price)
 
-    Table A + B + C = Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint, Benefit_Name, Benefit_Description, Price)
+    Table A + B + C = Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price)
     
     Table D = Apps_Price_plans (*#App_Id, *#Price_Plans_Id)
     Table E = Apps_Pricing_Plans_Features (*App_Id, *Pricing_Plan_Id, Feature)
@@ -436,10 +436,24 @@ Others      | ...                                                          | sup
 
   4. Final Result:
 
-    Apps (*Id, Url, Title, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Price_Hint, Benefit_Name, Benefit_Description, Price)
+    Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price)
     Reviews (*#App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
     Developers (*Id, Name, Link)
     Price_plans (*Id, Name)
     Categories (*Id, Name)
     Apps_Categories (*#App_Id, *#Category_Id)
+    Apps_Price_plans (*#App_Id, *#Price_Plans_Id, Feature)
+
+### Final Integration (Union of All Datasets):
+
+  1. With the same Primary Key:
+
+    Developers (*Id, Name, Link)
+
+  2. With Contained Key = With the same Primary Key
+
+  3. Third Normal Form = With the same Primary Key
+
+  4. Final Result:
+
     Apps_Price_plans (*#App_Id, *#Price_Plans_Id, Feature)
