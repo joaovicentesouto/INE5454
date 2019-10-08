@@ -637,21 +637,11 @@ Others      | ...                                                          | sup
 
 #### Tabela é Atributo Multivalorado
 
-```Nenhuma (Talvez apps_genres? mas genres sumiria dai.)```
+```Nenhuma```
 
 #### Tabela é Entidade Fraca
 
-```
-	Apps (*Id, #Age_Rating_Id, #Developer_Id, ...)
-	Age_Ratings (*Id, Age_Rating)
-		-> {App} FRACA (0,N) - <Age_Classifications> - (1,1) {Age_Ratings}
-	Developers (*Id, Name, Link)
-		-> {App} FRACA (0,N) - <Creator> - (1,1) {Developers}
-
-	Reviews (*Id, #Sentiment_Type_Id, ...)
-	Sentiment_Type (*Id, Type)
-		-> {Review} FRACA (0,N) - <Sentiment_Analysis> - (1,1) {Sentiment_Type}
-```
+```Nenhuma```
 
 #### Tabela é Hierarquia de Especialização
 
