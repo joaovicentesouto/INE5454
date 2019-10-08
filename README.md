@@ -217,15 +217,9 @@ Others      | ...                                                          | sup
   2. First Normal Form:
 
 	Apps (*Id)
-	Reviews (*#App_Id, *Review_Id, Review)
+	Reviews (*Review_Id, #App_Id, Review)
 
-  3. Second Normal Form:
-  
-	(*Review_Id) -> Review
-	
-	Apps (*Id)
-	Reviews (*Review_Id, Review)
-	Apps_Reviews (*#App_Id, *#Review_Id)
+  3. Second Normal Form = First Normal Form
 
   4. Third Normal Form = Second Normal Form
 
@@ -245,8 +239,7 @@ Others      | ...                                                          | sup
 	Currencies (*Id, Currency)
 	Prices (*#App_Id, *#Currency_Id, Price)
 	Age_Ratings (*Id, Age_Rating)
-	Reviews (*Review_Id, Review)
-	Apps_Reviews (*#App_Id, *#Review_Id)
+	Reviews (*Review_Id, #App_Id, Review)
 
   2. With Contained Key = With the same Primary Key
 
@@ -259,8 +252,7 @@ Others      | ...                                                          | sup
 	Currencies (*Id, Currency)
 	Prices (*#App_Id, *#Currency_Id, Price)
 	Age_Ratings (*Id, Age_Rating)
-	Reviews (*Review_Id, Review)
-	Apps_Reviews (*#App_Id, *#Review_Id)
+	Reviews (*Review_Id, #App_Id, Review)
 
 ### Shopify Store
 
@@ -468,7 +460,7 @@ Others      | ...                                                          | sup
 	
 	
 	(Google)  Table F = Reviews (*Id, #App_Name, #Sentiment_Type_Id, Translated_Review, Sentiment_Polarity, Sentiment_Subjectivity)
-	(Apple)   Table G = Reviews (*Review_Id, Review)
+	(Apple)   Table G = Reviews (*Review_Id, #App_Id, Review)
 	(Shopify) Table H = Reviews (*Id, #App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
 	
 	Equals Attributes:
@@ -542,7 +534,6 @@ Others      | ...                                                          | sup
 	
 	Removed Attributes from Reviews for duplicity:
 
-	  #App_Id
 	  #App_Name
 	
 	Included Attributes in Prices due to removal of Price from Apps:
@@ -551,7 +542,7 @@ Others      | ...                                                          | sup
 
 
 	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
-	Reviews (*Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
 	Age_Ratings (*Id, Age_Rating)
 	Developers (*Id, Name, Link)
 	Sentiment_Type (*Id, Type)
@@ -560,7 +551,6 @@ Others      | ...                                                          | sup
 	Categories (*Id, Name)
 	Genres (*Id, Genre)
 	Apps_Genres (*#App_Id, *#Genre_Id)
-	Apps_Reviews (*#App_Id, *#Review_Id)
 	Apps_Categories (*#App_Id, *#Category_Id)
 	Apps_Price_plans (*#App_Id, *#Price_Plan_Id, Feature)
 	Prices (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Price)
@@ -573,7 +563,7 @@ Others      | ...                                                          | sup
 	Table A + B = Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
 
 	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
-	Reviews (*Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
 	Age_Ratings (*Id, Age_Rating)
 	Developers (*Id, Name, Link)
 	Sentiment_Type (*Id, Type)
@@ -582,7 +572,6 @@ Others      | ...                                                          | sup
 	Categories (*Id, Name)
 	Genres (*Id, Genre)
 	Apps_Genres (*#App_Id, *#Genre_Id)
-	Apps_Reviews (*#App_Id, *#Review_Id)
 	Apps_Categories (*#App_Id, *#Category_Id)
 
   3. Third Normal Form = With Contained Key
@@ -590,7 +579,7 @@ Others      | ...                                                          | sup
   4. Final Result:
 
 	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
-	Reviews (*Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
 	Age_Ratings (*Id, Age_Rating)
 	Developers (*Id, Name, Link)
 	Sentiment_Type (*Id, Type)
@@ -599,7 +588,6 @@ Others      | ...                                                          | sup
 	Categories (*Id, Name)
 	Genres (*Id, Genre)
 	Apps_Genres (*#App_Id, *#Genre_Id)
-	Apps_Reviews (*#App_Id, *#Review_Id)
 	Apps_Categories (*#App_Id, *#Category_Id)
 	Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
 
@@ -607,7 +595,7 @@ Others      | ...                                                          | sup
 
 	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name,	Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
 	
-	Reviews (*Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
+	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
 	
 	Age_Ratings (*Id, Age_Rating)
 	Developers (*Id, Name, Link)
@@ -617,7 +605,6 @@ Others      | ...                                                          | sup
 	Categories (*Id, Name)
 	Genres (*Id, Genre)
 	Apps_Genres (*#App_Id, *#Genre_Id)
-	Apps_Reviews (*#App_Id, *#Review_Id)
 	Apps_Categories (*#App_Id, *#Category_Id)
 	Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
 
@@ -627,7 +614,6 @@ Others      | ...                                                          | sup
 
 ```
   Apps_Genres (*#App_Id, *#Genre_Id)        -> {App} (0,N) - <Apps_Genres> - (1,N) {Genre}
-  Apps_Reviews (*#App_Id, *#Review_Id)      -> {App} (1,1) - <Apps_Reviews> - (0,N) {Review}
   Apps_Categories (*#App_Id, *#Category_Id) -> {App} (0,N) - <Apps_Categories> - (1,1) {Category}
   Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
 	-> {App} (0,N) - <Apps_Price_Plans_Currencys |Feature, Price|> - (0,N) {Price_plans}
@@ -651,7 +637,7 @@ Others      | ...                                                          | sup
 
 	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, ...)
 		-> {Apps |...|}
-	Reviews (*Id, #Sentiment_Type_Id, Author, ...)
+	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, ...)
 		-> {Reviews |...|}
 	Age_Ratings (*Id, Age_Rating)
 		-> {Age_Ratings |...|}
