@@ -459,38 +459,40 @@ Others      | ...                                                          | sup
 	Table A + B + C = Apps (*Id, #Category_Id, #Genre_Id, #Age_Rating_Id, #Developer_Id, #Price_Type_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
 	
 	
-	(Google)  Table F = Reviews (*Id, #App_Name, #Sentiment_Type_Id, Translated_Review, Sentiment_Polarity, Sentiment_Subjectivity)
-	(Apple)   Table G = Reviews (*Review_Id, #App_Id, Review)
-	(Shopify) Table H = Reviews (*Id, #App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
+	(Google)  Table D = Reviews (*Id, #App_Name, #Sentiment_Type_Id, Translated_Review, Sentiment_Polarity, Sentiment_Subjectivity)
+	(Apple)   Table E = Reviews (*Review_Id, #App_Id, Review)
+	(Shopify) Table F = Reviews (*Id, #App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
 	
 	Equals Attributes:
-	
+
 	  Id = Review_Id
 	  Review = Content = Translated_Review
 	  
-	Table F + G + H = Reviews (*Id, #App_Id, #App_name, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, #Sentiment_Type_Id, Sentiment_Polarity, Sentiment_Subjectivity)
-	
-	
-	(Google) Table D = Genres (*Id, Name)
-	(Apple)  Table E = Genres (*Id, Genre)
+	Table D + E + F = Reviews (*Id, #App_Id, #App_name, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, #Sentiment_Type_Id, Sentiment_Polarity, Sentiment_Subjectivity)
+
+
+	(Google)  Table G = Genres (*Id, Name)
+	(Apple)   Table H = Genres (*Id, Genre)	
+	(Google)  Table I = Category (*Id, Name)
+	(Shopify) Table J = Categories (*Id, Name)
 	
 	Equals Attributes:
 	
 	  Genre = Name
 	  
-	Table D + E = Genres (*Id, Genre)
-	
-	
-	(Apple)  Table I = Age_Ratings (*Id, Age_Rating)
-	(Google) Table J = Age_Rating (*Id, Age)
+	Table G + H + I + J = Categories (*Id, Name)
+
+
+	(Apple)  Table L = Age_Ratings (*Id, Age_Rating)
+	(Google) Table M = Age_Rating (*Id, Age)
 	
 	Equals Attributes:
 	
 	  Age_Rating = Age
 	  
-	Table I + J = Age_Ratings (*Id, Age_Rating)
-	
-	
+	Table L + M = Age_Ratings (*Id, Age_Rating)
+
+
 	(Google)  Table N = Price_Type (*Id, Type)
 	(Shopify) Table O = Price_plans (*Id, Name)
 	
@@ -499,23 +501,8 @@ Others      | ...                                                          | sup
 	  Type = Name
 	  
 	Table N + O = Price_plans (*Id, Name)
-	
-	
-	(Shopify) Table L = Categories (*Id, Name)
-	(Google)  Table M = Category (*Id, Name)
-	  
-	Table L + M = Categories (*Id, Name))
-	
-	
-	Table K = Apps_Genres (*#App_Name, *#Genre_Id)
-	
-	Attributes Manipulations:
-	
-	  Uses the app Id, not its name.
-	  
-	Table K = Apps_Genres (*#App_Id, *#Genre_Id)
-	
-	AppReviews (*#App_Id, *#Review_Id)
+
+
 	Developers (*Id, Name, Link)
 	Sentiment_Type (*Id, Type)
 	Currencies (*Id, Currency)
@@ -528,7 +515,6 @@ Others      | ...                                                          | sup
 	Removed Attributes from Apps for duplicity:
 	
 	  #Category_Id
-	  #Genre_Id
 	  #Price_Plan_Id
 	  Price
 	
@@ -549,8 +535,6 @@ Others      | ...                                                          | sup
 	Currencies (*Id, Currency)
 	Price_plans (*Id, Name)
 	Categories (*Id, Name)
-	Genres (*Id, Genre)
-	Apps_Genres (*#App_Id, *#Genre_Id)
 	Apps_Categories (*#App_Id, *#Category_Id)
 	Apps_Price_plans (*#App_Id, *#Price_Plan_Id, Feature)
 	Prices (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Price)
@@ -570,8 +554,6 @@ Others      | ...                                                          | sup
 	Currencies (*Id, Currency)
 	Price_plans (*Id, Name)
 	Categories (*Id, Name)
-	Genres (*Id, Genre)
-	Apps_Genres (*#App_Id, *#Genre_Id)
 	Apps_Categories (*#App_Id, *#Category_Id)
 
   3. Third Normal Form = With Contained Key
@@ -586,8 +568,6 @@ Others      | ...                                                          | sup
 	Currencies (*Id, Currency)
 	Price_plans (*Id, Name)
 	Categories (*Id, Name)
-	Genres (*Id, Genre)
-	Apps_Genres (*#App_Id, *#Genre_Id)
 	Apps_Categories (*#App_Id, *#Category_Id)
 	Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
 
@@ -603,23 +583,24 @@ Others      | ...                                                          | sup
 	Currencies (*Id, Currency)
 	Price_plans (*Id, Name)
 	Categories (*Id, Name)
-	Genres (*Id, Genre)
-	Apps_Genres (*#App_Id, *#Genre_Id)
 	Apps_Categories (*#App_Id, *#Category_Id)
 	Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
 
 ### Construtor Conceitual para uma Tabela
 
-#### "CP composta por várias CEs" e "CP completa é uma CE"
+#### CP composta por várias CEs
 
 ```
-  Apps_Genres (*#App_Id, *#Genre_Id)        -> {App} (0,N) - <Apps_Genres> - (1,N) {Genre}
   Apps_Categories (*#App_Id, *#Category_Id) -> {App} (0,N) - <Apps_Categories> - (1,1) {Category}
   Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
-	-> {App} (0,N) - <Apps_Price_Plans_Currencys |Feature, Price|> - (0,N) {Price_plans}
-	                                | (0,N)
-	                            {Currency}
+		-> {App} (0,N) - <Apps_Price_Plans_Currencys |Feature, Price|> - (0,N) {Price_plans}
+		                                | (0,N)
+		                            {Currency}
 ```
+
+#### CP completa é uma única CE
+
+```Nenhuma```
 
 #### Tabela é Atributo Multivalorado
 
@@ -651,5 +632,3 @@ Others      | ...                                                          | sup
 		-> {Price_plans |...|}
 	Categories (*Id, Name)
 		-> {Categories |...|}
-	Genres (*Id, Genre)
-		-> {Genres |...|}
