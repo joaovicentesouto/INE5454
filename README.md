@@ -642,6 +642,275 @@ Others      | ...                                                          | sup
 
 ### Jason Structure
 
+```
+{
+    "title": "Apps",
+    "type": "object",
+    "required": ["id"],
+    "properties":
+    {
+        "id":
+        {
+            "description": "Unique app identifier",
+            "type": "integer",
+            "minimum": 0,
+            "primarykey": true
+        },
+        "categories_id":
+        {
+            "type": "array",
+            "itens":
+            {
+                "description": "Specifies the app category",
+                "type": "integer",
+                "minimum": 0,
+                "foreignkey": true
+            }
+        },
+        "apps_price_plans":
+        {
+            "type": "array",
+            "itens":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "price_plan_id":
+                    {
+                        "description": "Unique app identifier",
+                        "type": "integer",
+                        "foreignkey": true
+                    },
+                    "feature":
+                    {
+                        "description": "The app features for a given price plan",
+                        "type": "string"
+                    },
+                    "currency":
+                    {
+                        "type": "array",
+                        "itens":
+                        {
+                            "type": "object",
+                            "properties":
+                            {
+                                "currency_id":
+                                {
+                                    "description": "The app currency id for a given price plan",
+                                    "type": "integer",
+                                    "foreignkey": true
+                                },
+                                "price":
+                                {
+                                    "description": "App price for a given price plan and currency",
+                                    "type": "number",
+                                    "minimum": 0.0
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "age_rating_id":
+        {
+            "description": "Specifies the minimum ages of app reviewers",
+            "type": "integer",
+            "minimum": 0,
+            "foreignkey": true
+        },
+        "store_type":
+        {
+            "type": "array",
+            "minimum": 1,
+            "itens":
+            {
+                "description": "Identifies the app store that has the app",
+                "type": "integer"
+                "minimum": 0,
+                "maximum": 2
+            }
+        },
+        "name":
+        {
+            "description": "App name",
+            "type": "string"
+        },
+        "rating":
+        {
+            "description": "App rating",
+            "type": "number",
+            "minimum": 0.0
+        },
+        "store":
+        {
+            "type": "object",
+            "properties":
+            {
+                "shopify_apps":
+                {
+                    "type": "object",
+                    "properties":
+                    {
+                        "developer_id":
+                        {
+                            "description": "Specifies the app developer",
+                            "type": "integer",
+                            "minimum": 0,
+                            "foreignkey": true
+                        },
+                        "app_description":
+                        {
+                            "description": "Informations about the app",
+                            "type": "string"
+                        },
+                        "app_raw_description":
+                        {
+                            "description": "Informations about the app with HTML tags",
+                            "type": "string"
+                        },
+                        "url":
+                        {
+                            "description": "App link",
+                            "type": "string"
+                        },
+                        "tagline":
+                        {
+                            "description": "A short description about the app",
+                            "type": "string"
+                        },
+                        "icon":
+                        {
+                            "description": "The link to the app icon",
+                            "type": "string"
+                        },
+                        "benefit_name":
+                        {
+                            "description": "Short of main app benefits",
+                            "type": "string"
+                        },
+                        "benefit_description":
+                        {
+                            "description": "Description of main app benefits uses",
+                            "type": "string"
+                        },
+                        "free_trial_days":
+                        {
+                            "description": "How many days the user can use the app without payment",
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    }
+                },
+                "apple_apps":
+                {
+                    "type": "object",
+                    "properties":
+                    {
+                        "app_description":
+                        {
+                            "description": "Informations about the app",
+                            "type": "string"
+                        },
+                        "version":
+                        {
+                            "description": "Current version available",
+                            "type": "number",
+                            "minimum": 0.0
+                        },
+                        "n_of_supported_devices":
+                        {
+                            "description": "Amount of devices that runs the app",
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "n_of_ipad_urls":
+                        {
+                            "description": "Number of ipad urls",
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "n_of_available_languages":
+                        {
+                            "description": "Number of languages that the app supports",
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "belongs_to_volume_purchase_program":
+                        {
+                            "description": "0 if the app does not belongs to VPP or 1 otherwise",
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "rating_curr_version":
+                        {
+                            "description": "Rating of the current version available",
+                            "type": "number",
+                            "minimum": 0.0
+                        },
+                        "n_of_rating_curr_version":
+                        {
+                            "description": "Number of rating of the current version available",
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "size":
+                        {
+                            "description": "App size",
+                            "type": "number",
+                            "minimum": 0.0
+                        }
+                    }
+                },
+                "google_apps":
+                {
+                    "type": "object",
+                    "properties":
+                    {
+                        "version":
+                        {
+                            "description": "Current version available",
+                            "type": "number",
+                            "minimum": 0.0
+                        },
+                        "size":
+                        {
+                            "description": "App size",
+                            "type": "number",
+                            "minimum": 0.0
+                        },
+                        "n_of_reviews":
+                        {
+                            "description": "Number of app reviews",
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "android_version_required":
+                        {
+                            "description": "Android version required",
+                            "type": "number",
+                            "minimum": 0.0
+                        },
+                        "latest_update_at_store":
+                        {
+                            "description": "Date of Latest app update at store",
+                            "type": "data",
+                            "minimum": "01/01/1990"
+                        },
+                        "n_of_downloads":
+                        {
+                            "description": "Number of downloads from store",
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
 ### Workload
 
 	Listagem dos aplicativos que possuem uma ou mais categorias específicas.
