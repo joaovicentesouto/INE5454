@@ -571,7 +571,7 @@ Others      | ...                                                          | sup
 	Apps_Categories (*#App_Id, *#Category_Id)
 	Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
 
-## Reverse Engineering
+## Second Step - Reverse Engineering
 
 	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name,	Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
 	
@@ -632,3 +632,15 @@ Others      | ...                                                          | sup
 		-> {Price_plans |...|}
 	Categories (*Id, Name)
 		-> {Categories |...|}
+
+## Third Step - DB Design 1 (Document with MongoDB)
+
+### Jason Structure
+
+### Workload
+
+	Listagem dos aplicativos que possuem uma ou mais categorias específicas.
+	Listagem, com uma dada ordenação, dos aplicativos que possuem determinadas categorias e avaliação acima de um dado valor.
+	Quantidade de aplicativos de uma determinada categoria por loja (Google, Apple ou Shopify).
+	Listagem das categorias que frequentemente estão associadas à uma categoria específica.
+	Preço mínimo, máximo, médio e mediano dos aplicativos de uma determinada categoria por loja.
