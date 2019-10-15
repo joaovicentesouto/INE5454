@@ -137,7 +137,7 @@ Others      | ...                                                          | sup
 
   1. Not Normalized:
 
-	(*Id, Name, Size, (Currency), Price, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, (Age_Rating), (Genre), N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+	(*Id, Name, Size, Currency, Price, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, Age_Rating, Genre, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
 
   1.5. Mapping Names:
 
@@ -147,7 +147,7 @@ Others      | ...                                                          | sup
 	Currency -> currency
 	Price -> price
 	N_of_Rating -> rating_count_tot
- N_of_Rating_Curr_Version -> rating_count_ver
+	N_of_Rating_Curr_Version -> rating_count_ver
 	Rating -> user_rating
 	Rating_Curr_Version -> user_rating_ver
 	Version -> ver
@@ -156,21 +156,21 @@ Others      | ...                                                          | sup
 	N_of_Supported_Devices -> sup_devices.num
 	N_of_ipad_URLs -> ipadSc_urls.num
 	N_of_Available_Languages -> lang.num
- Belongs_To_Volume_Purchase_Program -> vpp_lic
+	Belongs_To_Volume_Purchase_Program -> vpp_lic
 
-  2. First Normal Form:
+  2. First Normal Form
 
-	Apps (*Id, Name, Size, #Currency_Id, Price, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, #Age_Id, #Genre_Id, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
-	Genres (*Id, Genre)
-	Currencies (*Id, Currency)
-	Age_Ratings (*Id, Age_Rating)
+	App (*Id, Name, Size, Currency, Price, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, Age_Rating, Genre, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
 
   3. Second Normal Form = First Normal Form
 
   4. Third Normal Form:
-  
+
+	Genre_Id -> Genre
+	Currency_Id -> Currency
+	Age_Id -> Age_Rating
 	(*Id, #Currency_Id) -> Price
-	
+
 	Apps (*Id, Name, Size, N_of_Rating, N_of_Rating_Curr_Version, Rating, Rating_Curr_Version, Version, #Age_Id, #Genre_Id, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
 	Genres (*Id, Genre)
 	Currencies (*Id, Currency)
@@ -410,10 +410,10 @@ Others      | ...                                                          | sup
 	Table C = Apps (*Id, Price)
 
 	Table A + B + C = Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price)
-	
+
 	Table D = Apps_Price_plans (*#App_Id, *#Price_Plans_Id)
 	Table E = Apps_Pricing_Plans_Features (*App_Id, *Pricing_Plan_Id, Feature)
-	
+
 	Table D + E = Apps_Price_plans (*#App_Id, *#Price_Plans_Id, Feature)
 
 	Developers (*Id, Name, Link)
@@ -443,63 +443,64 @@ Others      | ...                                                          | sup
 	(Apple)   Table A = Apps (*Id, Name, Size, Version, Description, #Genre_Id, #Age_Id, Rating, Rating_Curr_Version, N_of_Rating, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
 	(Shopify) Table B = Apps (*Id, Url, Name, Tagline, #Developer_Id, Icon, Rating, Reviews_count, Description, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price)
 	(Google)  Table C = Apps (*Id, Name, #Category_Id, #Price_Type_Id, #Age_Rating_Id, Rating, N_of_Reviews, Price, Size, N_of_Downloads, Latest_Update_at_Store, Curr_Version_Available, Android_Version_Required)
-	
+
 	Equals Attributes:
-	
+
 	  Reviews_Count = N_of_Rating = N_of_Reviews
 	  Curr_Version_Available = Version
 	  Age_Rating_Id = Age_Id
-	  
+
 	Attributes Manipulations:
-	
-	  At C table the key attribute is the app name but it is possible to create an Id related to each name and make this Id as a Primary Key.
+
+	  1. At C table the key attribute is the app name but it is possible to create an Id related to each name and make this Id as a Primary Key.
 	  However, it's necessary to verify if there is an intersection between the apps name of C table and the same in other tables.
 	  In this case, it's possible to reuse an existing key.
-	  
-	Table A + B + C = Apps (*Id, #Category_Id, #Genre_Id, #Age_Rating_Id, #Developer_Id, #Price_Type_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
-	
-	
+	  2. Because separate applications exist in each database, applications may not have all the attributes of the tables. So we created a type attribute that specializes the store from which the app came from.
+
+	Table A + B + C = Apps (*Id, Type, #Category_Id, #Genre_Id, #Age_Rating_Id, #Developer_Id, #Price_Type_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, Price, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+
+
 	(Google)  Table D = Reviews (*Id, #App_Name, #Sentiment_Type_Id, Translated_Review, Sentiment_Polarity, Sentiment_Subjectivity)
 	(Apple)   Table E = Reviews (*Review_Id, #App_Id, Review)
 	(Shopify) Table F = Reviews (*Id, #App_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date)
-	
+
 	Equals Attributes:
 
 	  Id = Review_Id
 	  Review = Content = Translated_Review
-	  
+
 	Table D + E + F = Reviews (*Id, #App_Id, #App_name, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, #Sentiment_Type_Id, Sentiment_Polarity, Sentiment_Subjectivity)
 
 
 	(Google)  Table G = Genres (*Id, Name)
-	(Apple)   Table H = Genres (*Id, Genre)	
+	(Apple)   Table H = Genres (*Id, Genre)
 	(Google)  Table I = Category (*Id, Name)
 	(Shopify) Table J = Categories (*Id, Name)
-	
+
 	Equals Attributes:
-	
+
 	  Genre = Name
-	  
+
 	Table G + H + I + J = Categories (*Id, Name)
 
 
 	(Apple)  Table L = Age_Ratings (*Id, Age_Rating)
 	(Google) Table M = Age_Rating (*Id, Age)
-	
+
 	Equals Attributes:
-	
+
 	  Age_Rating = Age
-	  
+
 	Table L + M = Age_Ratings (*Id, Age_Rating)
 
 
 	(Google)  Table N = Price_Type (*Id, Type)
 	(Shopify) Table O = Price_plans (*Id, Name)
-	
+
 	Equals Attributes:
-	
+
 	  Type = Name
-	  
+
 	Table N + O = Price_plans (*Id, Name)
 
 
@@ -511,23 +512,23 @@ Others      | ...                                                          | sup
 	Apps_Categories (*#App_Id, *#Category_Id)
 
   1.5. Intermediate Result:
-	
+
 	Removed Attributes from Apps for duplicity:
-	
+
 	  #Category_Id
 	  #Price_Plan_Id
 	  Price
-	
+
 	Removed Attributes from Reviews for duplicity:
 
 	  #App_Name
-	
+
 	Included Attributes in Prices due to removal of Price from Apps:
 
 	  #Price_Plan_Id
 
 
-	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+	Apps (*Id, Type, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
 	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
 	Age_Ratings (*Id, Age_Rating)
 	Developers (*Id, Name, Link)
@@ -540,13 +541,13 @@ Others      | ...                                                          | sup
 	Prices (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Price)
 
   2. With Contained Key
-  
+
 	Table A = Apps_Price_plans (*#App_Id, *#Price_Plan_Id, Feature)
 	Table B = Prices (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Price)
-	
+
 	Table A + B = Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
 
-	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+	Apps (*Id, Type, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
 	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
 	Age_Ratings (*Id, Age_Rating)
 	Developers (*Id, Name, Link)
@@ -560,7 +561,7 @@ Others      | ...                                                          | sup
 
   4. Final Result:
 
-	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+	Apps (*Id, Type, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name, Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
 	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
 	Age_Ratings (*Id, Age_Rating)
 	Developers (*Id, Name, Link)
@@ -573,10 +574,10 @@ Others      | ...                                                          | sup
 
 ## Reverse Engineering
 
-	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name,	Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
-	
+	Apps (*Id, Type, #Age_Rating_Id, #Developer_Id, Name, Size, Version, Description, Rating, Rating_Curr_Version, N_of_Reviews, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name,	Benefit_Description, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+
 	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, Content, Rating, Helpful_Count, Post_Date, Developer_Reply, Developer_Reply_Post_Date, Sentiment_Polarity, Sentiment_Subjectivity)
-	
+
 	Age_Ratings (*Id, Age_Rating)
 	Developers (*Id, Name, Link)
 	Sentiment_Type (*Id, Type)
@@ -593,9 +594,9 @@ Others      | ...                                                          | sup
 ```
   Apps_Categories (*#App_Id, *#Category_Id) -> {App} (0,N) - <Apps_Categories> - (1,1) {Category}
   Apps_Price_Plans_Currencys (*#App_Id, *#Price_Plan_Id, *#Currency_Id, Feature, Price)
-		-> {App} (0,N) - <Apps_Price_Plans_Currencys |Feature, Price|> - (0,N) {Price_plans}
-		                                | (0,N)
-		                            {Currency}
+	    -> {App} (0,N) - <Apps_Price_Plans_Currencys |Feature, Price|> - (0,N) {Price_plans}
+	                                         | (0,N)
+	                                    {Currency}
 ```
 
 #### CP completa é uma única CE
@@ -612,12 +613,16 @@ Others      | ...                                                          | sup
 
 #### Tabela é Hierarquia de Especialização
 
-```Nenhuma```
+	Apps (*Id, Name, Rating, #Age_Rating_Id) -<|-- ...
+
+	... -> Google_Apps (Size, Version, N_of_Reviews, N_of_Downloads, Latest_Update_at_Store, Android_Version_Required)
+
+	... -> Apple_Apps (Size, Version, Description, Rating_Curr_Version, N_of_Rating_Curr_Version, N_of_Supported_Devices, N_of_ipad_URLs, N_of_Available_Languages, Belongs_To_Volume_Purchase_Program)
+
+	... -> Shopify_Apps (#Developer_Id, Description, Url, Tagline, Icon, Description_Raw, Free_Trial_Days, Benefit_Name,	Benefit_Description)
 
 #### Tabela é uma Entidade (Forte)
 
-	Apps (*Id, #Age_Rating_Id, #Developer_Id, Name, ...)
-		-> {Apps |...|}
 	Reviews (*Id, #App_Id, #Sentiment_Type_Id, Author, ...)
 		-> {Reviews |...|}
 	Age_Ratings (*Id, Age_Rating)
