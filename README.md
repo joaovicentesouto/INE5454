@@ -640,7 +640,7 @@ Others      | ...                                                          | sup
 
 ## Third Step - DB Design 1 (Document with MongoDB)
 
-### Jason Structure
+### Json Structures
 
 ```
 {
@@ -906,6 +906,149 @@ Others      | ...                                                          | sup
                     }
                 }
             }
+        }
+    }
+}
+```
+
+```
+{
+    "title": "Currencies",
+    "type": "object",
+    "required": ["id"],
+    "properties":
+    {
+        "id":
+        {
+            "description": "Unique currency identifier",
+            "type": "integer",
+            "minimum": 0,
+            "primarykey": true
+        },
+        "Currency":
+        {
+            "description": "Currency Acronym",
+            "type": "string"
+        }
+    }
+}
+```
+
+```
+{
+    "title": "Price_Plans",
+    "type": "object",
+    "required": ["id"],
+    "properties":
+    {
+        "id":
+        {
+            "description": "Unique price plan identifier",
+            "type": "integer",
+            "minimum": 0,
+            "primarykey": true
+        },
+        "Name":
+        {
+            "description": "Price Plan name",
+            "type": "string"
+        }
+    }
+}
+```
+
+```
+{
+    "title": "Age_Ratings",
+    "type": "object",
+    "required": ["id"],
+    "properties":
+    {
+        "id":
+        {
+            "description": "Unique age rating identifier",
+            "type": "integer",
+            "minimum": 0,
+            "primarykey": true
+        },
+        "Age_Rating":
+        {
+            "description": "Lower age range limit",
+            "type": "string"
+        }
+    }
+}
+```
+
+```
+{
+    "title": "Catergories",
+    "type": "object",
+    "required": ["id"],
+    "properties":
+    {
+        "id":
+        {
+            "description": "Unique category identifier",
+            "type": "integer",
+            "minimum": 0,
+            "primarykey": true
+        },
+        "Name":
+        {
+            "description": "Category name",
+            "type": "string"
+        }
+    }
+}
+```
+
+```
+{
+    "title": "Developers",
+    "type": "object",
+    "required": ["id"],
+    "properties":
+    {
+        "id":
+        {
+            "description": "Unique developer identifier",
+            "type": "integer",
+            "minimum": 0,
+            "primarykey": true
+        },
+        "Name":
+        {
+            "description": "Developer name",
+            "type": "string"
+        },
+	"link":
+	{
+	    "description": "Developer link",
+	    "type": "string"
+	}
+    }
+}
+```
+
+```
+{
+    "title": "Sentiment_Type",
+    "type": "object",
+    "required": ["id"],
+    "properties":
+    {
+        "id":
+        {
+            "description": "Unique developer identifier",
+            "type": "integer",
+            "minimum": 0,
+            "primarykey": true
+        },
+        "Type":
+        {
+            "description": "Type of the sentiment",
+            "type": "string"
         }
     }
 }
