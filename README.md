@@ -642,6 +642,8 @@ Others      | ...                                                          | sup
 
 ### Json Structures
 
+#### App
+
 ```
 {
     "title": "Apps",
@@ -686,7 +688,7 @@ Others      | ...                                                          | sup
                         "description": "The app features for a given price plan",
                         "type": "string"
                     },
-                    "currency":
+                    "currencies":
                     {
                         "type": "array",
                         "itens":
@@ -909,7 +911,62 @@ Others      | ...                                                          | sup
         }
     }
 }
+
+Example:
+{
+	"id": 123456789,
+	"categories_id": [0, 1],
+	"apps_price_plans": [
+		{
+			"price_plan_id": 2,
+			"feature": "+1GB of google drive space",
+			"currencies": [
+				{
+					"currency_id": 0,
+					"price": 4,50
+				},
+				{
+					"currency_id": 1,
+					"price": 11,99
+				}
+			]
+		},
+		{
+			"price_plan_id": 3,
+			"feature": "+10GB of google drive space",
+			"currencies": [
+				{
+					"currency_id": 0,
+					"price": 9,00
+				},
+				{
+					"currency_id": 1,
+					"price": 23,00
+				}
+			]
+		}
+	],
+	"age_rating_id": 1,
+	"store_type": [1],
+	"name": "MyApp"
+	"rating": 5,
+	"store": {
+		"apple_apps": {
+			"app_description": "This is a dummy app!",
+			"version": "2.3.1"
+			"n_of_supported_devices": 4,
+			"n_of_ipad_urls": 10,
+			"n_of_available_languages": 2,
+			"belongs_to_volume_purchase_program": 0,
+			"rating_curr_version": 4.5,
+			"n_of_rating_curr_version": 15000,
+			"size": 1000
+		}
+	}
+}
 ```
+
+#### Currency
 
 ```
 {
@@ -925,14 +982,22 @@ Others      | ...                                                          | sup
             "minimum": 0,
             "primarykey": true
         },
-        "Currency":
+        "currency":
         {
             "description": "Currency Acronym",
             "type": "string"
         }
     }
 }
+
+Example:
+{
+	"id": 0,
+	"currency": "USD"
+}
 ```
+
+#### Price_Plan
 
 ```
 {
@@ -948,14 +1013,22 @@ Others      | ...                                                          | sup
             "minimum": 0,
             "primarykey": true
         },
-        "Name":
+        "name":
         {
             "description": "Price Plan name",
             "type": "string"
         }
     }
 }
+
+Example:
+{
+	"id": 1,
+	"name": "Premium"
+}
 ```
+
+#### Age_Rating
 
 ```
 {
@@ -971,14 +1044,22 @@ Others      | ...                                                          | sup
             "minimum": 0,
             "primarykey": true
         },
-        "Age_Rating":
+        "age_rating":
         {
             "description": "Lower age range limit",
             "type": "string"
         }
     }
 }
+
+Example:
+{
+	"id": 2,
+	"age_rating": "14+"
+}
 ```
+
+#### Catergory
 
 ```
 {
@@ -994,14 +1075,22 @@ Others      | ...                                                          | sup
             "minimum": 0,
             "primarykey": true
         },
-        "Name":
+        "name":
         {
             "description": "Category name",
             "type": "string"
         }
     }
 }
+
+Example:
+{
+	"id": 3,
+	"name": "business"
+}
 ```
+
+#### Developer
 
 ```
 {
@@ -1017,7 +1106,7 @@ Others      | ...                                                          | sup
             "minimum": 0,
             "primarykey": true
         },
-        "Name":
+        "name":
         {
             "description": "Developer name",
             "type": "string"
@@ -1029,7 +1118,16 @@ Others      | ...                                                          | sup
 	}
     }
 }
+
+Example:
+{
+	"id": 4,
+	"name": "DeveloperInk",
+	"link": "www.develeoperink.com"
+}
 ```
+
+#### Sentiment_Type
 
 ```
 {
@@ -1045,12 +1143,18 @@ Others      | ...                                                          | sup
             "minimum": 0,
             "primarykey": true
         },
-        "Type":
+        "type":
         {
             "description": "Type of the sentiment",
             "type": "string"
         }
     }
+}
+
+Example:
+{
+	"id": 5,
+	"type": Positive
 }
 ```
 
