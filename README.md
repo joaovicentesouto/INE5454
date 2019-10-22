@@ -1,6 +1,12 @@
 # INE5454
 Special Topics in Data Management: Reverse Engineering and Polyglot Persistence
 
+# Contents
+
+* [Data](https://github.com/joaovicentesouto/INE5454/README.md#markdown-header-data)
+	* [Sources](https://github.com/joaovicentesouto/INE5454/README.md#markdown-header-sources)
+	* [Raw](https://github.com/joaovicentesouto/INE5454/README.md#markdown-header-raw)
+
 # Data
 
 The following sections present the data used in this project.
