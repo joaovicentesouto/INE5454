@@ -6,6 +6,20 @@ Special Topics in Data Management: Reverse Engineering and Polyglot Persistence
 * [Data](#data)
 	* [Sources](#sources)
 	* [Raw](#raw)
+* [Steps](#steps)
+	* [First Step - Datasets Normalization](first-step-datasetsnormalization)
+		* [Google Play Store](#google-play-store)
+		* [Apple Store](#apple-store)
+		* [Shopify Store](#shopify-store)
+		* [Final Integration (Union of All Datasets):](#final-integration-union-of-all-datasets)
+	* [Second Step - Reverse Engineering](second-step-reverse-engineering)
+	* [Third Step - DB Design 1 (Document with MongoDB)](third-step-db-design1-document-with-mongodb)
+		* [Json Structures](#json-structures)
+		* [MongoDB Workload](#mongodb-workload)
+	* [Fourth Step - DB Design 2 (Multi-columns with Cassandra)](fourth-step-db-design2-multi-columns-with-cassandra)
+		* [Cassandra Keyspaces](#cassandra-keyspaces)
+		* [Cassandra Workload](#cassandra-workload)
+
 
 # Data
 
@@ -36,7 +50,9 @@ Developer   | ...                                                          | ...
 Sentiment   | Sentiment <br>Sentiment_Polarity</br> Sentiment_Subjectivity | ...                                                                   | ...
 Others      | ...                                                          | sup_devices.num <br>ipadSc_urls.num</br> vpp_lic                      | icon <br>url</br>
 
-## Fist Step - Datasets Normalization
+# Steps
+
+## First Step - Datasets Normalization
 
 ### Google Play Store
 
@@ -1164,10 +1180,22 @@ Example:
 }
 ```
 
-### Workload
+### MongoDB Workload
 
 	Listagem dos aplicativos que possuem uma ou mais categorias específicas.
 	Listagem, com uma dada ordenação, dos aplicativos que possuem determinadas categorias e avaliação acima de um dado valor.
 	Quantidade de aplicativos de uma determinada categoria por loja (Google, Apple ou Shopify).
 	Listagem das categorias que frequentemente estão associadas à uma categoria específica.
 	Preço mínimo, máximo, médio e mediano dos aplicativos de uma determinada categoria por loja.
+
+## Fourth Step - DB Design 2 (Multi-columns with Cassandra)
+
+	test
+
+### Cassandra Keyspaces
+
+	test
+
+### Cassandra Workload
+
+	test
