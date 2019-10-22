@@ -1192,9 +1192,15 @@ Example:
 
 ### Cassandra Keyspaces
 
+#### Keyspace
+
 ```sql
-CREATE KEYSPACE IF NOT EXISTS "keyspace" WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+CREATE KEYSPACE IF NOT EXISTS "keyspace" WITH replication = {
+	'class': 'SimpleStrategy', 'replication_factor': 1
+};
 ```
+
+#### Column Family
 
 ```sql
 CREATE TABLE "keyspace"."reviews" (
@@ -1212,6 +1218,13 @@ CREATE TABLE "keyspace"."reviews" (
 	developer_reply_post_date text,
 	PRIMARY KEY(review_id)
 );
+```
+
+#### Indexes
+
+```sql
+CREATE INDEX ON keyspace.reviews ( app_id );
+CREATE INDEX ON keyspace.reviews ( sentiment_type );
 ```
 
 ### Cassandra Workload
