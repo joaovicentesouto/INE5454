@@ -1190,12 +1190,32 @@ Example:
 
 ## Fourth Step - DB Design 2 (Multi-columns with Cassandra)
 
-	test
-
 ### Cassandra Keyspaces
 
-	test
+```sql
+CREATE KEYSPACE IF NOT EXISTS "keyspace" WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+```
+
+```sql
+CREATE TABLE "keyspace"."reviews" (
+	review_id                 uuid,
+	app_id                    bigint,
+	sentiment_type            text,
+	sentiment_polarity        float,
+	sentiment_subjectivity    float,
+	author                    text,
+	content                   text,
+	rating                    float,
+	helpful_count             decimal,
+	post_date                 text,
+	developer_reply           text,
+	developer_reply_post_date text,
+	PRIMARY KEY(review_id)
+);
+```
 
 ### Cassandra Workload
 
-	test
+	Listagem dos reviews de um ou mais aplicativo
+	Listagem dos comentários com rating baixo (ou alto) de um ou mais aplicativos
+	Listagem dos comentários com sentimento mais negativo (ou positivo) de um ou mais aplicativos
