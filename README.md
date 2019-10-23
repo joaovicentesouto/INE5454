@@ -13,10 +13,11 @@ Special Topics in Data Management: Reverse Engineering and Polyglot Persistence
 		* [Shopify Store](#shopify-store)
 		* [Final Integration (Union of All Datasets):](#final-integration-union-of-all-datasets)
 	* [Second Step - Reverse Engineering](#second-step---reverse-engineering)
-	* [Third Step - DB Design 1 (Document with MongoDB)](#third-step---db-design-1-document-with-mongodb)
+	* [Third Step - Logical Modeling of Aggregates](#third-step---logical-modeling-of-aggregates)
+	* [Fourth Step - DB Design 1 (Document with MongoDB)](#fourth-step---db-design-1-document-with-mongodb)
 		* [Json Structures](#json-structures)
 		* [MongoDB Workload](#mongodb-workload)
-	* [Fourth Step - DB Design 2 (Multi-columns with Cassandra)](#fourth-step---db-design-2-multi-columns-with-cassandra)
+	* [Fifth Step - DB Design 2 (Multi-columns with Cassandra)](#fifth-step---db-design-2-multi-columns-with-cassandra)
 		* [Cassandra Keyspaces](#cassandra-keyspaces)
 		* [Cassandra Workload](#cassandra-workload)
 
@@ -662,9 +663,9 @@ Others      | ...                                                          | sup
 
 ## Third Step - Logical Modeling for Aggregates
 
-![Applications]()
+- [Applications](https://github.com/joaovicentesouto/INE5454/blob/master/images/Logical_modeling_of_aggregates_1.pdf)
 
-![Reviews]()
+- [Reviews](https://github.com/joaovicentesouto/INE5454/blob/master/images/Logical_modeling_of_aggregates_2.pdf)
 
 ## Fourth Step - DB Design 1 (Document with MongoDB)
 
