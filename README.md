@@ -717,16 +717,9 @@ Others      | ...                                                          | sup
             "itens":
             {
                 "type": "object",
-                "required": ["id"],
+                "required": ["name"],
                 "properties":
                 {
-                    "id":
-                    {
-                        "description": "Unique price plan identifier",
-                        "type": "integer",
-                        "minimum": 0,
-                        "primarykey": true
-                    },
                     "name":
                     {
                         "description": "Price Plan name",
@@ -743,20 +736,19 @@ Others      | ...                                                          | sup
                         "itens":
                         {
                             "type": "object",
-                            "required": ["id"],
+                            "required": ["currency"],
                             "properties":
                             {
-                                "id":
-                                {
-                                    "description": "Unique currency identifier",
-                                    "type": "integer",
-                                    "minimum": 0,
-                                    "primarykey": true
-                                },
                                 "currency":
                                 {
                                     "description": "Currency Acronym",
                                     "type": "string"
+                                },
+                                "price":
+                                {
+                                    "description": "Price for an app with this currency",
+                                    "type": "numeric",
+                                    "minimum": 0.0
                                 }
                             }
                         }
@@ -766,23 +758,8 @@ Others      | ...                                                          | sup
         },
         "age_rating":
         {
-            "type": "object",
-            "required": ["id"],
-            "properties":
-            {
-                "id":
-                {
-                    "description": "Unique age rating identifier",
-                    "type": "integer",
-                    "minimum": 0,
-                    "primarykey": true
-                },
-                "age_rating":
-                {
-                    "description": "Lower age range limit",
-                    "type": "string"
-                }
-            }
+            "description": "Lower age range limit",
+            "type": "string"
         },
         "name":
         {
@@ -803,16 +780,9 @@ Others      | ...                                                          | sup
                 "developer":
                 {
                     "type": "object",
-                    "required": ["id"],
+                    "required": ["name"],
                     "properties":
                     {
-                        "id":
-                        {
-                            "description": "Unique developer identifier",
-                            "type": "integer",
-                            "minimum": 0,
-                            "primarykey": true
-                        },
                         "name":
                         {
                             "description": "Developer name",
@@ -988,48 +958,41 @@ Example:
     ],
     "apps_price_plans": [
         {
-            "id": 2,
             "name": "Premium"
             "feature": "+1GB of google drive space",
             "currencies": [
                 {
-                    "currency_id": 0,
+                    "currency": US$,
                     "price": 4,50
                 },
                 {
-                    "currency_id": 1,
+                    "currency": R$,
                     "price": 11,99
                 }
             ]
         },
         {
-            "price_plan_id": 3,
             "name": "Platinum"
             "feature": "+10GB of google drive space",
             "currencies": [
                 {
-                    "currency_id": 0,
+                    "currency_id": US$,
                     "price": 9,00
                 },
                 {
-                    "currency_id": 1,
+                    "currency_id": R$,
                     "price": 23,00
                 }
             ]
         }
     ],
-    "age_rating":
-    {
-        "id": 2,
-        "age_rating": "14+"
-    },
+    "age_rating": "14+",
     "name": "MyApp",
     "rating": 5,
     "shopify_apps":
     {
         "developer":
         {
-            "id": 4,
             "name": "DeveloperInk",
             "link": "www.develeoperink.com"
         }
