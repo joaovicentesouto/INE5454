@@ -687,15 +687,28 @@ Others      | ...                                                          | sup
             "minimum": 0,
             "primarykey": true
         },
-        "categories_id":
+        "categories":
         {
             "type": "array",
             "itens":
             {
-                "description": "Specifies the app category",
-                "type": "integer",
-                "minimum": 0,
-                "foreignkey": true
+                "type": "object",
+                "required": ["id"],
+                "properties":
+                {
+                    "id":
+                    {
+                        "description": "Unique category identifier",
+                        "type": "integer",
+                        "minimum": 0,
+                        "primarykey": true
+                    },
+                    "name":
+                    {
+                        "description": "Category name",
+                        "type": "string"
+                    }
+                }
             }
         },
         "apps_price_plans":
@@ -704,13 +717,20 @@ Others      | ...                                                          | sup
             "itens":
             {
                 "type": "object",
+                "required": ["id"],
                 "properties":
                 {
-                    "price_plan_id":
+                    "id":
                     {
-                        "description": "Unique app identifier",
+                        "description": "Unique price plan identifier",
                         "type": "integer",
-                        "foreignkey": true
+                        "minimum": 0,
+                        "primarykey": true
+                    },
+                    "name":
+                    {
+                        "description": "Price Plan name",
+                        "type": "string"
                     },
                     "feature":
                     {
@@ -723,19 +743,20 @@ Others      | ...                                                          | sup
                         "itens":
                         {
                             "type": "object",
+                            "required": ["id"],
                             "properties":
                             {
-                                "currency_id":
+                                "id":
                                 {
-                                    "description": "The app currency id for a given price plan",
+                                    "description": "Unique currency identifier",
                                     "type": "integer",
-                                    "foreignkey": true
+                                    "minimum": 0,
+                                    "primarykey": true
                                 },
-                                "price":
+                                "currency":
                                 {
-                                    "description": "App price for a given price plan and currency",
-                                    "type": "number",
-                                    "minimum": 0.0
+                                    "description": "Currency Acronym",
+                                    "type": "string"
                                 }
                             }
                         }
@@ -743,23 +764,24 @@ Others      | ...                                                          | sup
                 }
             }
         },
-        "age_rating_id":
+        "age_rating":
         {
-            "description": "Specifies the minimum ages of app reviewers",
-            "type": "integer",
-            "minimum": 0,
-            "foreignkey": true
-        },
-        "store_type":
-        {
-            "type": "array",
-            "minimum": 1,
-            "itens":
+            "type": "object",
+            "required": ["id"],
+            "properties":
             {
-                "description": "Identifies the app store that has the app",
-                "type": "integer"
-                "minimum": 0,
-                "maximum": 2
+                "id":
+                {
+                    "description": "Unique age rating identifier",
+                    "type": "integer",
+                    "minimum": 0,
+                    "primarykey": true
+                },
+                "age_rating":
+                {
+                    "description": "Lower age range limit",
+                    "type": "string"
+                }
             }
         },
         "name":
@@ -773,417 +795,259 @@ Others      | ...                                                          | sup
             "type": "number",
             "minimum": 0.0
         },
-        "store":
+        "shopify_apps":
         {
             "type": "object",
             "properties":
             {
-                "shopify_apps":
+                "developer":
                 {
                     "type": "object",
+                    "required": ["id"],
                     "properties":
                     {
-                        "developer_id":
+                        "id":
                         {
-                            "description": "Specifies the app developer",
+                            "description": "Unique developer identifier",
                             "type": "integer",
                             "minimum": 0,
-                            "foreignkey": true
+                            "primarykey": true
                         },
-                        "app_description":
+                        "name":
                         {
-                            "description": "Informations about the app",
+                            "description": "Developer name",
                             "type": "string"
                         },
-                        "app_raw_description":
+                        "link":
                         {
-                            "description": "Informations about the app with HTML tags",
+                            "description": "Developer link",
                             "type": "string"
-                        },
-                        "url":
-                        {
-                            "description": "App link",
-                            "type": "string"
-                        },
-                        "tagline":
-                        {
-                            "description": "A short description about the app",
-                            "type": "string"
-                        },
-                        "icon":
-                        {
-                            "description": "The link to the app icon",
-                            "type": "string"
-                        },
-                        "benefit_name":
-                        {
-                            "description": "Short of main app benefits",
-                            "type": "string"
-                        },
-                        "benefit_description":
-                        {
-                            "description": "Description of main app benefits uses",
-                            "type": "string"
-                        },
-                        "free_trial_days":
-                        {
-                            "description": "How many days the user can use the app without payment",
-                            "type": "integer",
-                            "minimum": 0
                         }
                     }
                 },
-                "apple_apps":
+                "app_description":
                 {
-                    "type": "object",
-                    "properties":
-                    {
-                        "app_description":
-                        {
-                            "description": "Informations about the app",
-                            "type": "string"
-                        },
-                        "version":
-                        {
-                            "description": "Current version available",
-                            "type": "number",
-                            "minimum": 0.0
-                        },
-                        "n_of_supported_devices":
-                        {
-                            "description": "Amount of devices that runs the app",
-                            "type": "integer",
-                            "minimum": 0
-                        },
-                        "n_of_ipad_urls":
-                        {
-                            "description": "Number of ipad urls",
-                            "type": "integer",
-                            "minimum": 0
-                        },
-                        "n_of_available_languages":
-                        {
-                            "description": "Number of languages that the app supports",
-                            "type": "integer",
-                            "minimum": 0
-                        },
-                        "belongs_to_volume_purchase_program":
-                        {
-                            "description": "0 if the app does not belongs to VPP or 1 otherwise",
-                            "type": "integer",
-                            "minimum": 0
-                        },
-                        "rating_curr_version":
-                        {
-                            "description": "Rating of the current version available",
-                            "type": "number",
-                            "minimum": 0.0
-                        },
-                        "n_of_rating_curr_version":
-                        {
-                            "description": "Number of rating of the current version available",
-                            "type": "integer",
-                            "minimum": 0
-                        },
-                        "size":
-                        {
-                            "description": "App size",
-                            "type": "number",
-                            "minimum": 0.0
-                        }
-                    }
+                    "description": "Informations about the app",
+                    "type": "string"
                 },
-                "google_apps":
+                "app_raw_description":
                 {
-                    "type": "object",
-                    "properties":
-                    {
-                        "version":
-                        {
-                            "description": "Current version available",
-                            "type": "number",
-                            "minimum": 0.0
-                        },
-                        "size":
-                        {
-                            "description": "App size",
-                            "type": "number",
-                            "minimum": 0.0
-                        },
-                        "n_of_reviews":
-                        {
-                            "description": "Number of app reviews",
-                            "type": "integer",
-                            "minimum": 0
-                        },
-                        "android_version_required":
-                        {
-                            "description": "Android version required",
-                            "type": "number",
-                            "minimum": 0.0
-                        },
-                        "latest_update_at_store":
-                        {
-                            "description": "Date of Latest app update at store",
-                            "type": "data",
-                            "minimum": "01/01/1990"
-                        },
-                        "n_of_downloads":
-                        {
-                            "description": "Number of downloads from store",
-                            "type": "integer",
-                            "minimum": 0
-                        }
-                    }
+                    "description": "Informations about the app with HTML tags",
+                    "type": "string"
+                },
+                "url":
+                {
+                    "description": "App link",
+                    "type": "string"
+                },
+                "tagline":
+                {
+                    "description": "A short description about the app",
+                    "type": "string"
+                },
+                "icon":
+                {
+                    "description": "The link to the app icon",
+                    "type": "string"
+                },
+                "benefit_name":
+                {
+                    "description": "Short of main app benefits",
+                    "type": "string"
+                },
+                "benefit_description":
+                {
+                    "description": "Description of main app benefits uses",
+                    "type": "string"
+                },
+                "free_trial_days":
+                {
+                    "description": "How many days the user can use the app without payment",
+                    "type": "integer",
+                    "minimum": 0
+                }
+            }
+        },
+        "apple_apps":
+        {
+            "type": "object",
+            "properties":
+            {
+                "app_description":
+                {
+                    "description": "Informations about the app",
+                    "type": "string"
+                },
+                "version":
+                {
+                    "description": "Current version available",
+                    "type": "number",
+                    "minimum": 0.0
+                },
+                "n_of_supported_devices":
+                {
+                    "description": "Amount of devices that runs the app",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "n_of_ipad_urls":
+                {
+                    "description": "Number of ipad urls",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "n_of_available_languages":
+                {
+                    "description": "Number of languages that the app supports",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "belongs_to_volume_purchase_program":
+                {
+                    "description": "0 if the app does not belongs to VPP or 1 otherwise",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "rating_curr_version":
+                {
+                    "description": "Rating of the current version available",
+                    "type": "number",
+                    "minimum": 0.0
+                },
+                "n_of_rating_curr_version":
+                {
+                    "description": "Number of rating of the current version available",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "size":
+                {
+                    "description": "App size",
+                    "type": "number",
+                    "minimum": 0.0
+                }
+            }
+        },
+        "google_apps":
+        {
+            "type": "object",
+            "properties":
+            {
+                "version":
+                {
+                    "description": "Current version available",
+                    "type": "number",
+                    "minimum": 0.0
+                },
+                "size":
+                {
+                    "description": "App size",
+                    "type": "number",
+                    "minimum": 0.0
+                },
+                "n_of_reviews":
+                {
+                    "description": "Number of app reviews",
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "android_version_required":
+                {
+                    "description": "Android version required",
+                    "type": "number",
+                    "minimum": 0.0
+                },
+                "latest_update_at_store":
+                {
+                    "description": "Date of Latest app update at store",
+                    "type": "data",
+                    "minimum": "01/01/1990"
+                },
+                "n_of_downloads":
+                {
+                    "description": "Number of downloads from store",
+                    "type": "integer",
+                    "minimum": 0
                 }
             }
         }
     }
 }
+```
 
 Example:
-{
-	"id": 123456789,
-	"categories_id": [0, 1],
-	"apps_price_plans": [
-		{
-			"price_plan_id": 2,
-			"feature": "+1GB of google drive space",
-			"currencies": [
-				{
-					"currency_id": 0,
-					"price": 4,50
-				},
-				{
-					"currency_id": 1,
-					"price": 11,99
-				}
-			]
-		},
-		{
-			"price_plan_id": 3,
-			"feature": "+10GB of google drive space",
-			"currencies": [
-				{
-					"currency_id": 0,
-					"price": 9,00
-				},
-				{
-					"currency_id": 1,
-					"price": 23,00
-				}
-			]
-		}
-	],
-	"age_rating_id": 1,
-	"store_type": [1],
-	"name": "MyApp"
-	"rating": 5,
-	"store": {
-		"apple_apps": {
-			"app_description": "This is a dummy app!",
-			"version": "2.3.1"
-			"n_of_supported_devices": 4,
-			"n_of_ipad_urls": 10,
-			"n_of_available_languages": 2,
-			"belongs_to_volume_purchase_program": 0,
-			"rating_curr_version": 4.5,
-			"n_of_rating_curr_version": 15000,
-			"size": 1000
-		}
-	}
-}
-```
-
-#### Currency
 
 ```
 {
-    "title": "Currencies",
-    "type": "object",
-    "required": ["id"],
-    "properties":
-    {
-        "id":
+    "id": 123456789,
+    "categories": [
         {
-            "description": "Unique currency identifier",
-            "type": "integer",
-            "minimum": 0,
-            "primarykey": true
-        },
-        "currency":
-        {
-            "description": "Currency Acronym",
-            "type": "string"
+            "id": 3,
+            "name": "business"
         }
-    }
-}
-
-Example:
-{
-	"id": 0,
-	"currency": "USD"
-}
-```
-
-#### Price_Plan
-
-```
-{
-    "title": "Price_Plans",
-    "type": "object",
-    "required": ["id"],
-    "properties":
-    {
-        "id":
+    ],
+    "apps_price_plans": [
         {
-            "description": "Unique price plan identifier",
-            "type": "integer",
-            "minimum": 0,
-            "primarykey": true
+            "id": 2,
+            "name": "Premium"
+            "feature": "+1GB of google drive space",
+            "currencies": [
+                {
+                    "currency_id": 0,
+                    "price": 4,50
+                },
+                {
+                    "currency_id": 1,
+                    "price": 11,99
+                }
+            ]
         },
-        "name":
         {
-            "description": "Price Plan name",
-            "type": "string"
+            "price_plan_id": 3,
+            "name": "Platinum"
+            "feature": "+10GB of google drive space",
+            "currencies": [
+                {
+                    "currency_id": 0,
+                    "price": 9,00
+                },
+                {
+                    "currency_id": 1,
+                    "price": 23,00
+                }
+            ]
         }
-    }
-}
-
-Example:
-{
-	"id": 1,
-	"name": "Premium"
-}
-```
-
-#### Age_Rating
-
-```
-{
-    "title": "Age_Ratings",
-    "type": "object",
-    "required": ["id"],
-    "properties":
+    ],
+    "age_rating":
     {
-        "id":
+        "id": 2,
+        "age_rating": "14+"
+    },
+    "name": "MyApp",
+    "rating": 5,
+    "shopify_apps":
+    {
+        "developer":
         {
-            "description": "Unique age rating identifier",
-            "type": "integer",
-            "minimum": 0,
-            "primarykey": true
-        },
-        "age_rating":
-        {
-            "description": "Lower age range limit",
-            "type": "string"
+            "id": 4,
+            "name": "DeveloperInk",
+            "link": "www.develeoperink.com"
         }
-    }
-}
-
-Example:
-{
-	"id": 2,
-	"age_rating": "14+"
-}
-```
-
-#### Catergory
-
-```
-{
-    "title": "Catergories",
-    "type": "object",
-    "required": ["id"],
-    "properties":
+        "app_description": "This is a dummy app!",
+        "app_raw_description": "This is a dummy app!"
+    },
+    "apple_apps":
     {
-        "id":
-        {
-            "description": "Unique category identifier",
-            "type": "integer",
-            "minimum": 0,
-            "primarykey": true
-        },
-        "name":
-        {
-            "description": "Category name",
-            "type": "string"
-        }
+        "app_description": "This is a dummy app!",
+        "version": "2.3.1",
+        "n_of_supported_devices": 4,
+        "n_of_ipad_urls": 10,
+        "n_of_available_languages": 2,
+        "belongs_to_volume_purchase_program": 0,
+        "rating_curr_version": 4.5,
+        "n_of_rating_curr_version": 15000,
+        "size": 1000
     }
-}
-
-Example:
-{
-	"id": 3,
-	"name": "business"
-}
-```
-
-#### Developer
-
-```
-{
-    "title": "Developers",
-    "type": "object",
-    "required": ["id"],
-    "properties":
-    {
-        "id":
-        {
-            "description": "Unique developer identifier",
-            "type": "integer",
-            "minimum": 0,
-            "primarykey": true
-        },
-        "name":
-        {
-            "description": "Developer name",
-            "type": "string"
-        },
-	"link":
-	{
-	    "description": "Developer link",
-	    "type": "string"
-	}
-    }
-}
-
-Example:
-{
-	"id": 4,
-	"name": "DeveloperInk",
-	"link": "www.develeoperink.com"
-}
-```
-
-#### Sentiment_Type
-
-```
-{
-    "title": "Sentiment_Type",
-    "type": "object",
-    "required": ["id"],
-    "properties":
-    {
-        "id":
-        {
-            "description": "Unique developer identifier",
-            "type": "integer",
-            "minimum": 0,
-            "primarykey": true
-        },
-        "type":
-        {
-            "description": "Type of the sentiment",
-            "type": "string"
-        }
-    }
-}
-
-Example:
-{
-	"id": 5,
-	"type": Positive
 }
 ```
 
