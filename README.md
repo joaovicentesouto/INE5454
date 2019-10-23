@@ -1195,7 +1195,7 @@ Example:
 	Listagem das categorias que frequentemente estão associadas à uma categoria específica.
 	Preço mínimo, máximo, médio e mediano dos aplicativos de uma determinada categoria por loja.
 
-## Fifith Step - DB Design 2 (Multi-columns with Cassandra)
+## Fifth Step - DB Design 2 (Multi-columns with Cassandra)
 
 ### Cassandra Keyspaces
 
