@@ -13,7 +13,7 @@ Special Topics in Data Management: Reverse Engineering and Polyglot Persistence
 		* [Shopify Store](#shopify-store)
 		* [Final Integration (Union of All Datasets):](#final-integration-union-of-all-datasets)
 	* [Second Step - Reverse Engineering](#second-step---reverse-engineering)
-	* [Third Step - Logical Modeling of Aggregates](#third-step---logical-modeling-of-aggregates)
+	* [Third Step - Logical Modeling for Aggregates](#third-step---logical-modeling-for-aggregates)
 	* [Fourth Step - DB Design 1 (Document with MongoDB)](#fourth-step---db-design-1-document-with-mongodb)
 		* [Json Structures](#json-structures)
 		* [MongoDB Workload](#mongodb-workload)
