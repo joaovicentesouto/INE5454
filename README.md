@@ -660,7 +660,13 @@ Others      | ...                                                          | sup
 	Categories (*Id, Name)
 		-> {Categories |...|}
 
-## Third Step - DB Design 1 (Document with MongoDB)
+## Third Step - Logical Modeling for Aggregates
+
+![Applications]()
+
+![Reviews]()
+
+## Fourth Step - DB Design 1 (Document with MongoDB)
 
 ### Json Structures
 
@@ -1188,7 +1194,7 @@ Example:
 	Listagem das categorias que frequentemente estão associadas à uma categoria específica.
 	Preço mínimo, máximo, médio e mediano dos aplicativos de uma determinada categoria por loja.
 
-## Fourth Step - DB Design 2 (Multi-columns with Cassandra)
+## Fifith Step - DB Design 2 (Multi-columns with Cassandra)
 
 ### Cassandra Keyspaces
 
