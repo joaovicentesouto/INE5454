@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas.api.types import is_string_dtype
 import numpy as np
 
 print("Loading Apple")
@@ -46,7 +47,7 @@ google_reviews.rename(
 	columns = {
 		'App':'app_name',
 		'Translated_Review':'content',
-		'Sentiment':'sentiment',
+		'Sentiment':'sentiment_type',
 		'Sentiment_Polarity':'sentiment_polarity',
 		'Sentiment_Subjectivity':'sentiment_subjectivity'
 	},
@@ -82,12 +83,8 @@ shopify_reviews = pd.read_csv("../datasets/shopify/reviews.csv")
 shopify_reviews.rename(
 	columns = {
 		'id':'app_id',
-		'author':'author',
-		'content':'content',
-		'rating':'rating',
-		'helpful_count':'helpful_count',
+		'body':'content',
 		'posted_at':'post_date',
-		'developer_reply':'developer_reply',
 		'developer_reply_posted_at':'developer_reply_post_date'
 	},
 	inplace = True
@@ -188,12 +185,12 @@ for index, row in apple_reviews.iterrows():
 	print("Adds apple reviews:", index)
 
 	new_row = [
-		str(row['app_id']),
+		row['app_id'],
 		np.nan,
 		np.nan,
 		np.nan,
 		np.nan,
-		str(row['content']),
+		row['content'],
 		np.nan,
 		np.nan,
 		np.nan,
@@ -207,12 +204,12 @@ for index, row in google_reviews.iterrows():
 	print("Adds google reviews:", index)
 
 	new_row = [
-		str(row['app_id']),
-		str(row['sentiment_type']),
-		str(row['sentiment_polarity']),
-		str(row['sentiment_subjectivity']),
+		row['app_id'],
+		row['sentiment_type'],
+		row['sentiment_polarity'],
+		row['sentiment_subjectivity'],
 		np.nan,
-		str(row['content']),
+		row['content'],
 		np.nan,
 		np.nan,
 		np.nan,
@@ -226,17 +223,17 @@ for index, row in shopify_reviews.iterrows():
 	print("Adds shopify reviews:", index)
 
 	new_row = [
-		str(row['app_id']),
+		row['app_id'],
 		np.nan,
 		np.nan,
 		np.nan,
-		str(row['author']),
-		str(row['content']),
-		str(row['rating']),
-		str(row['helpful_count']),
-		str(row['post_date']),
-		str(row['developer_reply']),
-		str(row['developer_reply_post_date'])
+		row['author'],
+		row['content'],
+		row['rating'],
+		row['helpful_count'],
+		row['post_date'],
+		row['developer_reply'],
+		row['developer_reply_post_date']
 	]
 
 	bulk_load.loc[bulk_load.index.max()+1] = new_row
