@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 print("Loading Apple")
 
@@ -150,7 +151,7 @@ max_id = apple_apps['app_id'].max()
 print("Update google id")
 
 for index, row in google_reviews.iterrows():
-	print("Google:", index)
+	print("Update Google:", index)
 	if row['app_name'] in apple_apps['app_name'].values:
 		row['app_ip'] = apple_apps[apple_apps['app_name'] == row['app_name']]['app_id'].values[0]
 	else:
@@ -160,7 +161,7 @@ for index, row in google_reviews.iterrows():
 print("Update shopify id")
 
 for index, row in shopify_apps.iterrows():
-	print("Shopify:", index)
+	print("Update Shopify:", index)
 	if row['app_name'] in apple_apps['app_name'].values:
 		new_id = apple_apps[apple_apps['app_name'] == row['app_name']]['app_id'].values[0]
 
@@ -168,11 +169,18 @@ for index, row in shopify_apps.iterrows():
 
 		row['app_ip'] = new_id
 	else:
-		max_id += 1
+		if row['app_name'] in google_reviews['app_name'].values:
+			new_id = google_reviews[google_reviews['app_name'] == row['app_name']]['app_id'].values[0]
 
-		shopify_reviews.loc[shopify_reviews['app_id'] == row['app_id'], 'app_id'] = max_id
+			shopify_reviews.loc[shopify_reviews['app_id'] == row['app_id'], 'app_id'] = new_id
 
-		row['app_ip'] = max_id
+			row['app_ip'] = new_id
+		else:
+			max_id += 1
+
+			shopify_reviews.loc[shopify_reviews['app_id'] == row['app_id'], 'app_id'] = max_id
+
+			row['app_ip'] = max_id
 
 # Buld bulk load
 
@@ -180,31 +188,12 @@ for index, row in apple_reviews.iterrows():
 	print("Adds apple reviews:", index)
 
 	new_row = [
-		row['app_id'],
+		str(row['app_id']),
 		np.nan,
 		np.nan,
 		np.nan,
 		np.nan,
-		row['content'],
-		np.nan,
-		np.nan,
-		np.nan,
-		np.nan,
-		np.nan
-	]
-
-	bulk_load.loc[bulk_load.index.max()+1] = new_row
-
-for index, row in apple_reviews.iterrows():
-	print("Adds apple reviews:", index)
-
-	new_row = [
-		row['app_id'],
-		row['sentiment_type'],
-		row['sentiment_polarity'],
-		row['sentiment_subjectivity'],
-		np.nan,
-		row['content'],
+		str(row['content']),
 		np.nan,
 		np.nan,
 		np.nan,
@@ -214,21 +203,40 @@ for index, row in apple_reviews.iterrows():
 
 	bulk_load.loc[bulk_load.index.max()+1] = new_row
 
-for index, row in apple_reviews.iterrows():
-	print("Adds apple reviews:", index)
+for index, row in google_reviews.iterrows():
+	print("Adds google reviews:", index)
 
 	new_row = [
-		row['app_id'],
+		str(row['app_id']),
+		str(row['sentiment_type']),
+		str(row['sentiment_polarity']),
+		str(row['sentiment_subjectivity']),
+		np.nan,
+		str(row['content']),
 		np.nan,
 		np.nan,
 		np.nan,
-		row['author'],
-		row['content'],
-		row['rating'],
-		row['helpful_count'],
-		row['post_date'],
-		row['developer_reply'],
-		row['developer_reply_post_date']
+		np.nan,
+		np.nan
+	]
+
+	bulk_load.loc[bulk_load.index.max()+1] = new_row
+
+for index, row in shopify_reviews.iterrows():
+	print("Adds shopify reviews:", index)
+
+	new_row = [
+		str(row['app_id']),
+		np.nan,
+		np.nan,
+		np.nan,
+		str(row['author']),
+		str(row['content']),
+		str(row['rating']),
+		str(row['helpful_count']),
+		str(row['post_date']),
+		str(row['developer_reply']),
+		str(row['developer_reply_post_date'])
 	]
 
 	bulk_load.loc[bulk_load.index.max()+1] = new_row
