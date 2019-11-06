@@ -2,6 +2,10 @@ import pandas as pd
 from pandas.api.types import is_string_dtype
 import numpy as np
 
+###################################################################################
+# Load Files and Change column names
+###################################################################################
+
 print("Loading Apple")
 
 # Bulk load
@@ -53,7 +57,7 @@ google_reviews.rename(
 	},
 	inplace = True
 )
-google_reviews['app_id'] = 0
+google_reviews['app_id'] = int(0)
 
 print("Loading Shopify")
 
@@ -90,12 +94,20 @@ shopify_reviews.rename(
 	inplace = True
 )
 
+###################################################################################
+# Transform app name to lowercase
+###################################################################################
+
 print("Preprocessing")
 
 # Preprocess
 apple_apps['app_name']     = apple_apps['app_name'].map(lambda x : x.lower())
 google_reviews['app_name'] = google_reviews['app_name'].map(lambda x : x.lower())
 shopify_apps['app_name']   = shopify_apps['app_name'].map(lambda x : x.lower())
+
+###################################################################################
+# Build default date type
+###################################################################################
 
 def build_date(date):
 	if not isinstance(date, str):
@@ -139,21 +151,35 @@ def build_date(date):
 
 for index, row in shopify_reviews.iterrows():
 	print("Shopify Preprocess:", index)
-	row['post_date'] = build_date(row['post_date'])
-	row['developer_reply_post_date'] = build_date(row['developer_reply_post_date'])
+
+	shopify_reviews.loc[index, 'post_date'] = build_date(row['post_date'])
+	shopify_reviews.loc[index, 'developer_reply_post_date'] = build_date(row['developer_reply_post_date'])
+
+###################################################################################
+# Updates app IDs
+###################################################################################
 
 # Updates App IDs
-max_id = apple_apps['app_id'].max()
+max_id = int(apple_apps['app_id'].max())
 
-print("Update google id")
+print("Max INDEX:", max_id)
 
 for index, row in google_reviews.iterrows():
 	print("Update Google:", index)
+	
+	new_id = -1
+	
 	if row['app_name'] in apple_apps['app_name'].values:
-		row['app_ip'] = apple_apps[apple_apps['app_name'] == row['app_name']]['app_id'].values[0]
+		new_id = apple_apps[apple_apps['app_name'] == row['app_name']]['app_id'].values[0]
 	else:
 		max_id += 1
-		row['app_ip'] = max_id
+		new_id = max_id
+	
+	google_reviews.loc[index, 'app_ip'] = int(new_id)
+
+	print("new id", google_reviews.loc[index, 'app_ip'])
+
+# google_reviews['app_id'] = google_reviews['app_id'].astype(int)
 
 print("Update shopify id")
 
@@ -164,20 +190,26 @@ for index, row in shopify_apps.iterrows():
 
 		shopify_reviews.loc[shopify_reviews['app_id'] == row['app_id'], 'app_id'] = new_id
 
-		row['app_ip'] = new_id
+		shopify_apps.loc[index, 'app_ip'] = new_id
 	else:
 		if row['app_name'] in google_reviews['app_name'].values:
 			new_id = google_reviews[google_reviews['app_name'] == row['app_name']]['app_id'].values[0]
 
 			shopify_reviews.loc[shopify_reviews['app_id'] == row['app_id'], 'app_id'] = new_id
 
-			row['app_ip'] = new_id
+			shopify_apps.loc[index, 'app_ip'] = new_id
 		else:
 			max_id += 1
 
 			shopify_reviews.loc[shopify_reviews['app_id'] == row['app_id'], 'app_id'] = max_id
 
-			row['app_ip'] = max_id
+			shopify_apps.loc[index, 'app_ip'] = max_id
+	
+	print("new id", shopify_apps.loc[index, 'app_ip'])
+
+###################################################################################
+# Create the csv to bulk load
+###################################################################################
 
 # Buld bulk load
 
@@ -185,12 +217,12 @@ for index, row in apple_reviews.iterrows():
 	print("Adds apple reviews:", index)
 
 	new_row = [
-		row['app_id'],
+		apple_reviews.loc[index, 'app_id'],
 		np.nan,
 		np.nan,
 		np.nan,
 		np.nan,
-		row['content'],
+		apple_reviews.loc[index, 'content'],
 		np.nan,
 		np.nan,
 		np.nan,
@@ -204,12 +236,12 @@ for index, row in google_reviews.iterrows():
 	print("Adds google reviews:", index)
 
 	new_row = [
-		row['app_id'],
-		row['sentiment_type'],
-		row['sentiment_polarity'],
-		row['sentiment_subjectivity'],
+		google_reviews.loc[index, 'app_id'],
+		google_reviews.loc[index, 'sentiment_type'],
+		google_reviews.loc[index, 'sentiment_polarity'],
+		google_reviews.loc[index, 'sentiment_subjectivity'],
 		np.nan,
-		row['content'],
+		google_reviews.loc[index, 'content'],
 		np.nan,
 		np.nan,
 		np.nan,
@@ -223,17 +255,17 @@ for index, row in shopify_reviews.iterrows():
 	print("Adds shopify reviews:", index)
 
 	new_row = [
-		row['app_id'],
+		shopify_reviews.loc[index, 'app_id'],
 		np.nan,
 		np.nan,
 		np.nan,
-		row['author'],
-		row['content'],
-		row['rating'],
-		row['helpful_count'],
-		row['post_date'],
-		row['developer_reply'],
-		row['developer_reply_post_date']
+		shopify_reviews.loc[index, 'author'],
+		shopify_reviews.loc[index, 'content'],
+		shopify_reviews.loc[index, 'rating'],
+		shopify_reviews.loc[index, 'helpful_count'],
+		shopify_reviews.loc[index, 'post_date'],
+		shopify_reviews.loc[index, 'developer_reply'],
+		shopify_reviews.loc[index, 'developer_reply_post_date']
 	]
 
 	bulk_load.loc[bulk_load.index.max()+1] = new_row
