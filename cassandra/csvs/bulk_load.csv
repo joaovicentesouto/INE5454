@@ -1,0 +1,2 @@
+app_id,sentiment_type,sentiment_polarity,sentiment_subjectivity,author,content,rating,helpful_count,post_date,developer_reply,developer_reply_post_date
+dummy,Positive,0.0,0.0,dummy,dummy,0.0,0,2019-01-01,dummy,2019-01-01
