@@ -860,6 +860,12 @@ Others      | ...                                                          | sup
                     "type": "integer",
                     "minimum": 0
                 },
+                "n_of_reviews":
+                {
+                    "description": "Amount of app reviews",
+                    "type": "integer",
+                    "minimum": 0
+                },
                 "n_of_ipad_urls":
                 {
                     "description": "Number of ipad urls",
