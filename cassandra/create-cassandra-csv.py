@@ -1,15 +1,17 @@
 import pandas as pd
-from pandas.api.types import is_string_dtype
 import numpy as np
+import uuid
 
 ###################################################################################
 # Load Files and Change column names
 ###################################################################################
 
-print("Loading Apple")
+print("Loading bulk load")
 
 # Bulk load
-bulk_load = pd.read_csv("csvs/bulk_load.csv")
+bulk_load = pd.read_csv("csvs/bulk_load.csv", sep=';')
+
+print("Loading Apple")
 
 # APPLE
 apple_apps = pd.read_csv("../datasets/apple/apps.csv")
@@ -111,7 +113,7 @@ shopify_apps['app_name']   = shopify_apps['app_name'].map(lambda x : x.lower())
 
 def build_date(date):
 	if not isinstance(date, str):
-		return '0000-00-00'
+		return np.nan
 
 	date = date.replace(",", "").split(" ")
 
@@ -160,24 +162,20 @@ for index, row in shopify_reviews.iterrows():
 ###################################################################################
 
 # Updates App IDs
-max_id = int(apple_apps['app_id'].max())
+initial_max = apple_apps['app_id'].max()
+max_id = initial_max
 
 print("Max INDEX:", max_id)
 
 for index, row in google_reviews.iterrows():
 	print("Update Google:", index)
-	
-	new_id = -1
-	
+
 	if row['app_name'] in apple_apps['app_name'].values:
-		new_id = apple_apps[apple_apps['app_name'] == row['app_name']]['app_id'].values[0]
+		if  row['app_id'] == 0:
+			google_reviews.loc[google_reviews['app_id'] == row['app_id'], 'app_id'] = apple_apps[apple_apps['app_name'] == row['app_name']]['app_id'].values[0]
 	else:
 		max_id += 1
-		new_id = max_id
-	
-	google_reviews.loc[index, 'app_ip'] = int(new_id)
-
-	print("new id", google_reviews.loc[index, 'app_ip'])
+		google_reviews.loc[google_reviews['app_name'] == row['app_name'], 'app_id'] = int(max_id)
 
 # google_reviews['app_id'] = google_reviews['app_id'].astype(int)
 
@@ -185,6 +183,7 @@ print("Update shopify id")
 
 for index, row in shopify_apps.iterrows():
 	print("Update Shopify:", index)
+
 	if row['app_name'] in apple_apps['app_name'].values:
 		new_id = apple_apps[apple_apps['app_name'] == row['app_name']]['app_id'].values[0]
 
@@ -204,8 +203,6 @@ for index, row in shopify_apps.iterrows():
 			shopify_reviews.loc[shopify_reviews['app_id'] == row['app_id'], 'app_id'] = max_id
 
 			shopify_apps.loc[index, 'app_ip'] = max_id
-	
-	print("new id", shopify_apps.loc[index, 'app_ip'])
 
 ###################################################################################
 # Create the csv to bulk load
@@ -216,13 +213,22 @@ for index, row in shopify_apps.iterrows():
 for index, row in apple_reviews.iterrows():
 	print("Adds apple reviews:", index)
 
+	if apple_reviews.loc[index, 'content'] == np.nan:
+		continue
+
+	content = str(apple_reviews.loc[index, 'content']).replace("\n", " ").replace(";", ":")
+
+	if content == 'nan':
+		continue
+
 	new_row = [
+		uuid.uuid4(),
 		apple_reviews.loc[index, 'app_id'],
 		np.nan,
 		np.nan,
 		np.nan,
 		np.nan,
-		apple_reviews.loc[index, 'content'],
+		content,
 		np.nan,
 		np.nan,
 		np.nan,
@@ -235,13 +241,22 @@ for index, row in apple_reviews.iterrows():
 for index, row in google_reviews.iterrows():
 	print("Adds google reviews:", index)
 
+	if google_reviews.loc[index, 'content'] == np.nan:
+		continue
+
+	content = str(google_reviews.loc[index, 'content']).replace("\n", " ").replace(";", ":")
+
+	if content == 'nan':
+		continue
+
 	new_row = [
+		uuid.uuid4(),
 		google_reviews.loc[index, 'app_id'],
 		google_reviews.loc[index, 'sentiment_type'],
 		google_reviews.loc[index, 'sentiment_polarity'],
 		google_reviews.loc[index, 'sentiment_subjectivity'],
 		np.nan,
-		google_reviews.loc[index, 'content'],
+		content,
 		np.nan,
 		np.nan,
 		np.nan,
@@ -254,13 +269,22 @@ for index, row in google_reviews.iterrows():
 for index, row in shopify_reviews.iterrows():
 	print("Adds shopify reviews:", index)
 
+	if shopify_reviews.loc[index, 'content'] != np.nan and str(shopify_reviews.loc[index, 'content']) == 'nan':
+		continue
+
+	content = str(shopify_reviews.loc[index, 'content']).replace("\n", " ").replace(";", ":")
+
+	if content == 'nan':
+		continue
+
 	new_row = [
+		uuid.uuid4(),
 		shopify_reviews.loc[index, 'app_id'],
 		np.nan,
 		np.nan,
 		np.nan,
 		shopify_reviews.loc[index, 'author'],
-		shopify_reviews.loc[index, 'content'],
+		content,
 		shopify_reviews.loc[index, 'rating'],
 		shopify_reviews.loc[index, 'helpful_count'],
 		shopify_reviews.loc[index, 'post_date'],
@@ -272,4 +296,4 @@ for index, row in shopify_reviews.iterrows():
 
 print("Saving CSV")
 
-bulk_load.to_csv('csvs/bulk_load_result.csv', sep=';', encoding='utf-8', index=False)
+bulk_load.to_csv('csvs/cassandra_bulk_load.csv', sep=';', encoding='utf-8', index=False)

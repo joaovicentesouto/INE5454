@@ -1,2 +1,2 @@
-app_id,sentiment_type,sentiment_polarity,sentiment_subjectivity,author,content,rating,helpful_count,post_date,developer_reply,developer_reply_post_date
-dummy,Positive,0.0,0.0,dummy,dummy,0.0,0,2019-01-01,dummy,2019-01-01
+review_id;app_id;sentiment_type;sentiment_polarity;sentiment_subjectivity;author;content;rating;helpful_count;post_date;developer_reply;developer_reply_post_date
+6ba2870d-c0d6-4234-949f-9ccbf077afa9;0;Positive;0.0;0.0;dummy;dummy;0.0;0.0;2019-01-01;dummy;2019-01-01
