@@ -1,5 +1,4 @@
 #mymodule.py
-
 ################################################################################################
 ############ Mapping from Apple dataset to json structure ######################################
 ################################################################################################
@@ -7,24 +6,24 @@
 '''
 
 {
-    "id": <id>,
-    "categories": [{"name": <prime_genre>}], (Remember to break the composed genres)
-    "apps_price_plans": [{"currencies:" [{"currency": <currency>,"price": <price>}]}],
-    "age_rating": <cont_rating>,
-    "name": <track_name>, (Verify if this name already exists in Google or Shopify stores)
-    "rating": <user_rating>,
-    "apple_apps":
+    "id" : <id>,
+    "categories" : ["<prime_genre>", ...], (Remember to break the composed genres)
+    "apps_price_plans" : [{"currencies: " [{"currency" : "<currency>", "price" : <price>}]}],
+    "age_rating" : <cont_rating>,
+    "name" : <track_name>, (Verify if this name already exists in Google or Shopify stores)
+    "rating" : <user_rating>,
+    "apple_apps" :
     {
-        "app_description": <app_description>, (Get from appleStore_description.csv by app id)
-        "version": <ver>,
-        "n_of_supported_devices":<sup_devices>,
-        "n_of_reviews": <rating_count_tot>,
-        "n_of_ipad_urls": <ipadSc_urls>,
-        "n_of_available_languages": <lang>,
-        "belongs_to_volume_purchase_program": <vpp_lic>,
-        "rating_curr_version": <user_rating_ver>,
-        "n_of_rating_curr_version": <rating_count_ver>,
-        "size": <size_bytes>
+        "app_description" : <app_description>, (Get from appleStore_description.csv by app id)
+        "version" : <ver>,
+        "n_of_supported_devices" :<sup_devices>,
+        "n_of_reviews" : <rating_count_tot>,
+        "n_of_ipad_urls" : <ipadSc_urls>,
+        "n_of_available_languages" : <lang>,
+        "belongs_to_volume_purchase_program" : <vpp_lic>,
+        "rating_curr_version" : <user_rating_ver>,
+        "n_of_rating_curr_version" : <rating_count_ver>,
+        "size" : <size_bytes>
     }
 }
 
@@ -39,20 +38,20 @@
 '''
 
 {
-	"id": <id>, (Generate the Google app ids with the Joao formule)
-	"categories": [{"name": <Category>},{"name": <Genres>}], (Remember to break the composed genres and categories)
-	"apps_price_plans": [{"name": <Type>, "currencies": [{"price": <Price>}]}],
-	"age_rating": <Content Rating>, (Remember to create a value accordingly to age rating category)
-	"name": <App>, (Verify if this name already exists in Shopify store)
-	"rating": <Rating>,
-	"google_apps":
+	"id" : <id>, (Generate the Google app ids with the Joao formule)
+	"categories" : [{"name" : <Category>},{"name" : <Genres>}], (Remember to break the composed genres and categories)
+	"apps_price_plans" : [{"name" : <Type>, "currencies" : [{"price" : <Price>}]}],
+	"age_rating" : <Content Rating>, (Remember to create a value accordingly to age rating category)
+	"name" : <App>, (Verify if this name already exists in Shopify store)
+	"rating" : <Rating>,
+	"google_apps" :
 	{
-		"version": <Current Ver>,
-		"size": <Size>, (Convert from Megabytes to bytes)
-		"n_of_reviews": <Reviews>,
-		"android_version_required": <Android Ver>,
-		"latest_update_at_store": <Last Updated>,
-		"n_of_downloads": <Installs>
+		"version" : <Current Ver>,
+		"size" : <Size>, (Convert from Megabytes to bytes)
+		"n_of_reviews" : <Reviews>,
+		"android_version_required" : <Android Ver>,
+		"latest_update_at_store" : <Last Updated>,
+		"n_of_downloads" : <Installs>
 	}
 }
 
@@ -66,26 +65,26 @@
 '''
 
 {
-	"id": <id>, (Verify if this id already exists and get the greatest id in the dataset plus one)
-	"categories": [{"name": <title>}], (Get the id attribute from apps file; get all category_id on apps_categories that is attached to app id; get the corresponding category name for the obtained category ids on categories file)
-	"apps_price_plans": [{"name": <title>, (Get the id attribute from apps file; get the corresponding plan name from pricing_plans file)
-						  "feature": <feature>, (Get the id attribute from apps file; get the corresponding plan feature from pricing_plan_feature file)
-						  "currencies": [{"currency": <price>, (Get the id attribute from apps file; get the corresponding currency from pricing_plans file. Ignore the price)
-						  				  "price": <price>}]}] (Get the id attribute from apps file; get the corresponding price from pricing_plans file. Ignore the price currency and period; convert strings to values)
-	"name": <title>,
-	"rating": <rating>,
-	"shopify_apps":
+	"id" : <id>, (Verify if this id already exists and get the greatest id in the dataset plus one)
+	"categories" : [{"name" : <title>}], (Get the id attribute from apps file; get all category_id on apps_categories that is attached to app id; get the corresponding category name for the obtained category ids on categories file)
+	"apps_price_plans" : [{"name" : <title>, (Get the id attribute from apps file; get the corresponding plan name from pricing_plans file)
+						  "feature" : <feature>, (Get the id attribute from apps file; get the corresponding plan feature from pricing_plan_feature file)
+						  "currencies" : [{"currency" : <price>, (Get the id attribute from apps file; get the corresponding currency from pricing_plans file. Ignore the price)
+						  				  "price" : <price>}]}] (Get the id attribute from apps file; get the corresponding price from pricing_plans file. Ignore the price currency and period; convert strings to values)
+	"name" : <title>,
+	"rating" : <rating>,
+	"shopify_apps" :
 	{
-			"developer": {"name": <developer>, "link": <developer_link>}
-            "app_description": <description>,
-            "app_raw_description": <description_raw>,
-            "url": <url>,
-            "tagline": <tagline>,
-            "icon": <icon>,
-            "benefit_name": <title>, (Get the id attribute from apps file; get the corresponding benefit name from key_benefits file)
-            "benefit_description": <description>, (Get the id attribute from apps file; get the corresponding benefit description from key_benefits file)
-            "free_trial_days": <pricing_hint>,
-            "n_of_reviews": <reviews_count>
+			"developer" : {"name" : <developer>, "link" : <developer_link>}
+            "app_description" : <description>,
+            "app_raw_description" : <description_raw>,
+            "url" : <url>,
+            "tagline" : <tagline>,
+            "icon" : <icon>,
+            "benefit_name" : <title>, (Get the id attribute from apps file; get the corresponding benefit name from key_benefits file)
+            "benefit_description" : <description>, (Get the id attribute from apps file; get the corresponding benefit description from key_benefits file)
+            "free_trial_days" : <pricing_hint>,
+            "n_of_reviews" : <reviews_count>
 	}
 }
 
@@ -98,6 +97,7 @@
 
 import pandas as pd
 import os
+import re
 
 
 ################################################################################################
@@ -180,40 +180,19 @@ shopify_f5_df['feature']   			= shopify_f5_df['feature'].map(lambda x : x.lower(
 ############ Auxiliar methods ##################################################################
 ################################################################################################
 
+def str_convert(s):
+	return re.sub('[^A-Za-z0-9 ]+', '', str(s))
+
 def category_splitter(content, splitter):
 
 	content_vector = content.split(splitter)
 
-	categories = '{"name":' + content_vector[0] + '}'
+	categories = '"' + content_vector[0] + '"'
 
 	for i in range(1, len(content_vector)):
-		categories = categories + ',{"name":' + content_vector[i] + '}'
+		categories = categories + ', "' + content_vector[i] + '"'
 
 	return categories
-
-def get_from_another_file(file, column, value, attribute):
-
-	try:
-
-		row = file[file[column] == value].index
-
-		return 1, file.loc[row, attribute][0]
-
-	except Exception as e:
-
-		return 0, ''
-
-def get_vector_from_another_file(file, column, value, attribute):
-
-	try:
-
-		row = file[file[column] == value].index
-
-		return 1, file.loc[row, attribute]
-
-	except Exception as e:
-
-		return 0, []
 
 def look_apple_app(app_name):
 
@@ -224,21 +203,21 @@ def look_apple_app(app_name):
 
 	row = (apple_f1_df[apple_f1_df['track_name'] == app_name].index)[0]
 
-	size_bytes = str(apple_f1_df.at[row, 'size_bytes'])
-	rating_count_tot = str(apple_f1_df.at[row, 'rating_count_tot'])
-	rating_count_ver = str(apple_f1_df.at[row, 'rating_count_ver'])
-	user_rating_ver = str(apple_f1_df.at[row, 'user_rating_ver'])
-	ver = str(apple_f1_df.at[row, 'ver'])
-	sup_devices = str(apple_f1_df.at[row, 'sup_devices.num'])
-	ipadSc_urls = str(apple_f1_df.at[row, 'ipadSc_urls.num'])
-	lang = str(apple_f1_df.at[row, 'lang.num'])
-	vpp_lic = str(apple_f1_df.at[row, 'vpp_lic'])
-	currency = str(apple_f1_df.at[row, 'currency'])
-	price = str(apple_f1_df.at[row, 'price'])
+	size_bytes = str_convert(apple_f1_df.at[row, 'size_bytes'])
+	rating_count_tot = str_convert(apple_f1_df.at[row, 'rating_count_tot'])
+	rating_count_ver = str_convert(apple_f1_df.at[row, 'rating_count_ver'])
+	user_rating_ver = str_convert(apple_f1_df.at[row, 'user_rating_ver'])
+	ver = str_convert(apple_f1_df.at[row, 'ver'])
+	sup_devices = str_convert(apple_f1_df.at[row, 'sup_devices.num'])
+	ipadSc_urls = str_convert(apple_f1_df.at[row, 'ipadSc_urls.num'])
+	lang = str_convert(apple_f1_df.at[row, 'lang.num'])
+	vpp_lic = str_convert(apple_f1_df.at[row, 'vpp_lic'])
+	currency = str_convert(apple_f1_df.at[row, 'currency'])
+	price = str_convert(apple_f1_df.at[row, 'price'])
 
 	############ Complex cases for File 1 ############
 
-	categories = category_splitter(str(apple_f1_df.at[row, 'prime_genre']), '&')
+	categories = category_splitter(str_convert(apple_f1_df.at[row, 'prime_genre']), '&')
 
 	apple_f1_df = apple_f1_df.drop(row)
 
@@ -246,15 +225,15 @@ def look_apple_app(app_name):
 
 	row = (apple_f2_df[apple_f2_df['track_name'] == app_name].index)[0]
 
-	app_description = str(apple_f2_df.at[row, 'app_desc']).replace('\n', ' ')
+	app_description = str_convert(apple_f2_df.at[row, 'app_desc'])
 
-	prices = '{"currencies:"[{"currency":' + currency + ',"price":' + price + '}]}'
+	prices = '{\n"currencies" : [\n{\n"currency" : "' + currency + '",\n"price" : ' + price + '}\n]\n}'
 
 	apple_f2_df = apple_f2_df.drop(row)
 
 	############ Final document ############
 
-	return categories, prices, '"apple_apps":{"app_description":' + app_description + ',"version":' + ver + ',"n_of_supported_devices":' + sup_devices + ',"n_of_reviews":' + rating_count_tot + ',"n_of_ipad_urls":' + ipadSc_urls + ',"n_of_available_languages":' + lang + ',"belongs_to_volume_purchase_program":' + vpp_lic + ',"rating_curr_version":' + user_rating_ver + ',"n_of_rating_curr_version":' + rating_count_ver + ',"size":' + size_bytes + '}'
+	return categories, prices, '"apple_apps" : {\n"app_description" : "' + app_description + '",\n"version" : "' + ver + '",\n"n_of_supported_devices" : ' + sup_devices + ',\n"n_of_reviews" : ' + rating_count_tot + ',\n"n_of_ipad_urls" : ' + ipadSc_urls + ',\n"n_of_available_languages" : ' + lang + ',\n"belongs_to_volume_purchase_program" : ' + vpp_lic + ',\n"rating_curr_version" : ' + user_rating_ver + ',\n"n_of_rating_curr_version" : ' + rating_count_ver + ',\n"size" : ' + size_bytes + '\n}'
 
 def look_google_app(app_name):
 
@@ -269,27 +248,27 @@ def look_google_app(app_name):
 
 	row = row[0]
 
-	app_type = str(google_f1_df.at[row, "Type"])
-	price = str(google_f1_df.at[row, "Price"])
-	curr_ver = str(google_f1_df.at[row, "Current Ver"])
-	size = str(google_f1_df.at[row, "Size"])
-	reviews = str(google_f1_df.at[row, "Reviews"])
-	android_ver = str(google_f1_df.at[row, "Android Ver"])
-	last_update = str(google_f1_df.at[row, "Last Updated"])
-	n_of_downloads = str(google_f1_df.at[row, "Installs"])
+	app_type = str_convert(google_f1_df.at[row, "Type"])
+	price = str_convert(google_f1_df.at[row, "Price"])
+	curr_ver = str_convert(google_f1_df.at[row, "Current Ver"])
+	size = str_convert(google_f1_df.at[row, "Size"])
+	reviews = str_convert(google_f1_df.at[row, "Reviews"])
+	android_ver = str_convert(google_f1_df.at[row, "Android Ver"])
+	last_update = str_convert(google_f1_df.at[row, "Last Updated"])
+	n_of_downloads = str_convert(google_f1_df.at[row, "Installs"])
 
 	############ Complex cases for File 1 ############
 
-	prices = '{"name":' + app_type + ',currencies:"[{"price":' + price + '}]}'
+	prices = '{"name" : "' + app_type + '",currencies: "[{"price" : ' + price + '}]}'
 
-	categories = category_splitter(str(google_f1_df.at[row, "Category"]), '_and_')
-	categories = categories + ',' + category_splitter(str(google_f1_df.at[row, "Genres"]), '&')
+	categories = category_splitter(str_convert(google_f1_df.at[row, "Category"]), '_and_')
+	categories = categories + ',' + category_splitter(str_convert(google_f1_df.at[row, "Genres"]), '&')
 
 	google_f1_df = google_f1_df.drop(row)
 
 	############ Final document ############
 
-	return categories, prices, '"google_apps":{"version":' + curr_ver + ',"size":' + size + ',"n_of_reviews":' + reviews + ',"android_version_required":' + android_ver + ',"latest_update_at_store":' + last_update + ',"n_of_downloads":' + n_of_downloads + '}'
+	return categories, prices, '"google_apps" : {\n"version" : "' + curr_ver + '",\n"size" : "' + size + '",\n"n_of_reviews" : ' + reviews + ',\n"android_version_required" : "' + android_ver + '",\n"latest_update_at_store" : "' + last_update + '",\n"n_of_downloads" : ' + n_of_downloads + '\n}'
 
 def look_shopify_app(app_name):
 
@@ -310,16 +289,16 @@ def look_shopify_app(app_name):
 	row = row[0]
 
 	app_id = shopify_f1_df.at[row, "id"]
-	name = str(shopify_f1_df.at[row, "title"])
-	developer = str(shopify_f1_df.at[row, "developer"])
-	developer_link = str(shopify_f1_df.at[row, "developer_link"])
-	description = str(shopify_f1_df.at[row, "description"]).replace('\n', ' ')
-	description_raw = str(shopify_f1_df.at[row, "description_raw"]).replace('\n', ' ')
-	url = str(shopify_f1_df.at[row, "url"])
-	tagline = str(shopify_f1_df.at[row, "tagline"])
-	icon = str(shopify_f1_df.at[row, "icon"])
-	pricing_hint = str(shopify_f1_df.at[row, "pricing_hint"])
-	reviews_count = str(shopify_f1_df.at[row, "reviews_count"])
+	name = str_convert(shopify_f1_df.at[row, "title"])
+	developer = str_convert(shopify_f1_df.at[row, "developer"])
+	developer_link = str_convert(shopify_f1_df.at[row, "developer_link"])
+	description = str_convert(shopify_f1_df.at[row, "description"])
+	description_raw = str_convert(shopify_f1_df.at[row, "description_raw"])
+	url = str_convert(shopify_f1_df.at[row, "url"])
+	tagline = str_convert(shopify_f1_df.at[row, "tagline"])
+	icon = str_convert(shopify_f1_df.at[row, "icon"])
+	pricing_hint = str_convert(shopify_f1_df.at[row, "pricing_hint"])
+	reviews_count = str_convert(shopify_f1_df.at[row, "reviews_count"])
 
 	shopify_f1_df = shopify_f1_df.drop(row)
 
@@ -334,16 +313,16 @@ def look_shopify_app(app_name):
 		for cat_id_row in range(len(rows)):
 			category_id = shopify_f2_df.at[cat_id_row, "category_id"]
 			cat_title_row = (shopify_f3_df[shopify_f3_df['id'] == category_id].index)[0]
-			categories = categories + comma + category_splitter(str(shopify_f3_df.at[cat_title_row, "title"]), 'and')
-			comma = ','
+			categories = categories + comma + category_splitter(str_convert(shopify_f3_df.at[cat_title_row, "title"]), 'and')
+			comma = ', '
 
 	############ Complex cases for File 4 ############
 
 	row = shopify_f4_df[shopify_f4_df['app_id'] == app_id].index
 
 	if len(row):
-		benefit_name = ',"benefit_name":' + str(shopify_f4_df.at[row[0], 'title'])
-		benefit_description = ',"benefit_description":' + (str(shopify_f4_df.at[row[0], 'description']).replace('\n', ' '))
+		benefit_name = '",\n"benefit_name" : "' + str_convert(shopify_f4_df.at[row[0], 'title'])
+		benefit_description = '",\n"benefit_description" : "' + (str_convert(shopify_f4_df.at[row[0], 'description']))
 	else:
 		benefit_name = ''
 		benefit_description = ''
@@ -357,12 +336,12 @@ def look_shopify_app(app_name):
 
 	if len(rows):
 		for plans_id_row in range(len(rows)):
-			plan_feature = shopify_f5_df.at[plans_id_row, "feature"]
+			plan_feature = str_convert(shopify_f5_df.at[plans_id_row, "feature"])
 
 			plan_id = shopify_f5_df.at[plans_id_row, "pricing_plan_id"]
 			plan_row = (shopify_f6_df[shopify_f6_df['id'] == plan_id].index)[0]
-			plan_title = str(shopify_f6_df.at[plan_row, "title"])
-			plan_currency_price = str(shopify_f6_df.at[plan_row, "title"])
+			plan_title = str_convert(shopify_f6_df.at[plan_row, "title"])
+			plan_currency_price = str_convert(shopify_f6_df.at[plan_row, "title"])
 
 			plan_currency = ''
 			plan_price = ''
@@ -374,12 +353,12 @@ def look_shopify_app(app_name):
 				else:
 					plan_price = plan_price + i
 
-			prices = prices + comma + '{"name":' + plan_title + ',"feature":' + plan_feature + ',"currencies:[{"currency:"' + plan_currency + ',"price":' + plan_price + '}]}'
+			prices = prices + comma + '{\n"name" : "' + plan_title + '"\n"feature" : "' + plan_feature + '"\n"currencies" : [\n{\n"currency" : "' + plan_currency + '",\n"price" : ' + plan_price + '\n}\n]\n}'
 			comma = ','
 
 	############ Final document ############
 
-	return categories, prices, '"shopify_apps":{"developer":{"name":' + developer + ',"link":' + developer_link + '},"app_description":' + description + ',"app_raw_description":' + description_raw + ',"url":' + url + ',"tagline":' + tagline + ',"icon":' + icon + benefit_name + benefit_description + ',"free_trial_days":' + pricing_hint + ',"n_of_reviews":' + reviews_count + '}'
+	return categories, prices, '"shopify_apps" : {\n"developer" : {\n"name" : "' + developer + '",\n"link" : "' + developer_link + '"},\n"app_description" : "' + description + '",\n"app_raw_description" : "' + description_raw + '",\n"url" : "' + url + '",\n"tagline" : "' + tagline + '",\n"icon" : "' + icon + benefit_name + benefit_description + '",\n"free_trial_days" : "' + pricing_hint + '",\n"n_of_reviews" : ' + reviews_count + '\n}'
 
 
 ################################################################################################
@@ -404,10 +383,10 @@ for i, j in apple_f1_df.iterrows():
 
 	############ Simple cases ############
 
-	app_id = str(j[0])
+	app_id = str_convert(j[0])
 	track_name = str(j[1])
-	user_rating = str(j[7])
-	cont_rating = str(j[10])
+	user_rating = str_convert(j[7])
+	cont_rating = str_convert(j[10])
 
 	############ Complex cases ############
 
@@ -433,11 +412,11 @@ for i, j in apple_f1_df.iterrows():
 	if s_data != '':
 		s_data = ',' + s_data
 
-	document = comma + '{"id":' + app_id + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"age_rating":' + cont_rating + ',"name":' + track_name + ',"rating":' + user_rating + ',' + apple_data + g_data + s_data + '}'
+	document = comma + '{\n"id" : ' + app_id + ',\n"categories" : [' + categories + '],\n"apps_price_plans" : [' + prices + '],\n"age_rating" : "' + cont_rating + '",\n"name" : "' + str_convert(track_name) + '",\n"rating" : ' + user_rating + ',\n' + apple_data + g_data + s_data + '\n}'
 
 	script.write(document)
 
-	comma = ','
+	comma = ',\n'
 
 # global_id = apple_f1_df['id'].max() + 1
 
@@ -446,8 +425,8 @@ for i, j in apple_f1_df.iterrows():
 # 	############ Simple cases ############
 
 # 	app = str(j[0])
-# 	rating = str(j[2])
-# 	content_rating = str(j[8])
+# 	rating = str_convert(j[2])
+# 	content_rating = str_convert(j[8])
 
 # 	############ Complex cases ############
 
@@ -463,7 +442,7 @@ for i, j in apple_f1_df.iterrows():
 # 	if s_data != '':
 # 		s_data = ',' + s_data
 
-# 	document = ',{"id":' + str(global_id) + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"age_rating":' + content_rating + ',"name":' + app + ',"rating":' + rating + ',' + google_data + s_data + '}'
+# 	document = ',{"id" : ' + str_convert(global_id) + ', "categories" : [' + categories + '], "apps_price_plans" : [' + prices + '], "age_rating" : ' + content_rating + ', "name" : ' + str_convert(app) + ', "rating" : ' + rating + ',' + google_data + s_data + '}'
 
 # 	global_id = global_id + 1
 
@@ -474,13 +453,13 @@ for i, j in apple_f1_df.iterrows():
 # 	############ Simple cases ############
 
 # 	title = str(j[2])
-# 	user_rating = str(j[7])
+# 	user_rating = str_convert(j[7])
 
 # 	############ Complex cases ############
 
 # 	categories, prices, shopify_data = look_shopify_app(title)
 
-# 	document = ',{"id":' + str(global_id) + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"name":' + title + ',"rating":' + user_rating + ',' + shopify_data + '}'
+# 	document = ',{"id" : ' + str_convert(global_id) + ', "categories" : [' + categories + '], "apps_price_plans" : [' + prices + '], "name" : ' + str_convert(title) + ', "rating" : ' + user_rating + ',' + shopify_data + '}'
 
 # 	global_id = global_id + 1
 
