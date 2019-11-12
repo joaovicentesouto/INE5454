@@ -246,7 +246,7 @@ def look_apple_app(app_name):
 
 	row = (apple_f2_df[apple_f2_df['track_name'] == app_name].index)[0]
 
-	app_description = apple_f2_df.at[row, 'app_desc']
+	app_description = str(apple_f2_df.at[row, 'app_desc']).replace('\n', ' ')
 
 	prices = '{"currencies:"[{"currency":' + currency + ',"price":' + price + '}]}'
 
@@ -313,8 +313,8 @@ def look_shopify_app(app_name):
 	name = str(shopify_f1_df.at[row, "title"])
 	developer = str(shopify_f1_df.at[row, "developer"])
 	developer_link = str(shopify_f1_df.at[row, "developer_link"])
-	description = str(shopify_f1_df.at[row, "description"])
-	description_raw = str(shopify_f1_df.at[row, "description_raw"])
+	description = str(shopify_f1_df.at[row, "description"]).replace('\n', ' ')
+	description_raw = str(shopify_f1_df.at[row, "description_raw"]).replace('\n', ' ')
 	url = str(shopify_f1_df.at[row, "url"])
 	tagline = str(shopify_f1_df.at[row, "tagline"])
 	icon = str(shopify_f1_df.at[row, "icon"])
@@ -328,12 +328,14 @@ def look_shopify_app(app_name):
 	rows = shopify_f2_df.loc[shopify_f2_df['app_id'] == app_id, ['category_id']].index
 
 	categories = ''
+	comma = ''
 
 	if len(rows):
 		for cat_id_row in range(len(rows)):
 			category_id = shopify_f2_df.at[cat_id_row, "category_id"]
 			cat_title_row = (shopify_f3_df[shopify_f3_df['id'] == category_id].index)[0]
-			categories = categories + category_splitter(str(shopify_f3_df.at[cat_title_row, "title"]), 'and')
+			categories = categories + comma + category_splitter(str(shopify_f3_df.at[cat_title_row, "title"]), 'and')
+			comma = ','
 
 	############ Complex cases for File 4 ############
 
@@ -341,7 +343,7 @@ def look_shopify_app(app_name):
 
 	if len(row):
 		benefit_name = ',"benefit_name":' + str(shopify_f4_df.at[row[0], 'title'])
-		benefit_description = ',"benefit_description":' + str(shopify_f4_df.at[row[0], 'description'])
+		benefit_description = ',"benefit_description":' + (str(shopify_f4_df.at[row[0], 'description']).replace('\n', ' '))
 	else:
 		benefit_name = ''
 		benefit_description = ''
@@ -351,6 +353,7 @@ def look_shopify_app(app_name):
 	rows = shopify_f5_df.loc[shopify_f5_df['app_id'] == app_id, ['pricing_plan_id']].index
 
 	prices = ''
+	comma = ''
 
 	if len(rows):
 		for plans_id_row in range(len(rows)):
@@ -371,11 +374,12 @@ def look_shopify_app(app_name):
 				else:
 					plan_price = plan_price + i
 
-			prices = prices + '{"name":' + plan_title + ',"feature":' + plan_feature + ',"currencies:[{"currency:"' + plan_currency + ',"price":' + plan_price + '}]}'
+			prices = prices + comma + '{"name":' + plan_title + ',"feature":' + plan_feature + ',"currencies:[{"currency:"' + plan_currency + ',"price":' + plan_price + '}]}'
+			comma = ','
 
 	############ Final document ############
 
-	return categories, prices, '"shopify_apps":{"developer":{"name":' + developer + ',"link":' + developer_link + '}"app_description":' + description + ',"app_raw_description":' + description_raw + ',"url":' + url + ',"tagline":' + tagline + ',"icon":' + icon + benefit_name + benefit_description + ',"free_trial_days":' + pricing_hint + ',"n_of_reviews":' + reviews_count + '}'
+	return categories, prices, '"shopify_apps":{"developer":{"name":' + developer + ',"link":' + developer_link + '},"app_description":' + description + ',"app_raw_description":' + description_raw + ',"url":' + url + ',"tagline":' + tagline + ',"icon":' + icon + benefit_name + benefit_description + ',"free_trial_days":' + pricing_hint + ',"n_of_reviews":' + reviews_count + '}'
 
 
 ################################################################################################
@@ -394,63 +398,31 @@ script.write('db.AppsCollection.insertMany([')
 ############ Generate all documents for Apple apps
 ################################################################################################
 
-first_comma = 0
+comma = ''
 
-# for i, j in apple_f1_df.iterrows():
-
-# 	############ Simple cases ############
-
-# 	app_id = str(j[0])
-# 	track_name = str(j[1])
-# 	user_rating = str(j[7])
-# 	cont_rating = str(j[10])
-
-# 	############ Complex cases ############
-
-# 	categories, prices, apple_data = look_apple_app(track_name)
-# 	g_categories, g_prices, g_data = look_google_app(track_name)
-# 	s_categories, s_prices, s_data = look_shopify_app(track_name)
-
-# 	if g_categories != '':
-# 		categories + ',' + g_categories
-
-# 	if g_prices != '':
-# 		prices + ',' + g_prices
-
-# 	if g_data != '':
-# 		g_data = ',' + g_data
-
-# 	if s_categories != '':
-# 		categories + ',' + s_categories
-
-# 	if s_prices != '':
-# 		prices + ',' + s_prices
-
-# 	if s_data != '':
-# 		s_data = ',' + s_data
-
-# 	document = '\n{"id":' + app_id + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"age_rating":' + cont_rating + ',"name":' + track_name + ',"rating":' + user_rating + ',' + apple_data + '}' + g_data + s_data + '}'
-
-# 	if first_comma == 1:
-# 		script.write(',' + document)
-# 	else:
-# 		first_comma = 1
-# 		script.write(document)
-
-global_id = apple_f1_df['id'].max() + 1
-
-for i, j in google_f1_df.iterrows():
+for i, j in apple_f1_df.iterrows():
 
 	############ Simple cases ############
 
-	app = str(j[0])
-	rating = str(j[2])
-	content_rating = str(j[8])
+	app_id = str(j[0])
+	track_name = str(j[1])
+	user_rating = str(j[7])
+	cont_rating = str(j[10])
 
 	############ Complex cases ############
 
-	categories, prices, google_data = look_google_app(app)
-	s_categories, s_prices, s_data = look_shopify_app(app)
+	categories, prices, apple_data = look_apple_app(track_name)
+	g_categories, g_prices, g_data = look_google_app(track_name)
+	s_categories, s_prices, s_data = look_shopify_app(track_name)
+
+	if g_categories != '':
+		categories + ',' + g_categories
+
+	if g_prices != '':
+		prices + ',' + g_prices
+
+	if g_data != '':
+		g_data = ',' + g_data
 
 	if s_categories != '':
 		categories + ',' + s_categories
@@ -461,30 +433,58 @@ for i, j in google_f1_df.iterrows():
 	if s_data != '':
 		s_data = ',' + s_data
 
-	document = '\n{"id":' + str(global_id) + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"age_rating":' + content_rating + ',"name":' + app + ',"rating":' + rating + ',' + google_data + s_data + '}'
+	document = comma + '{"id":' + app_id + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"age_rating":' + cont_rating + ',"name":' + track_name + ',"rating":' + user_rating + ',' + apple_data + g_data + s_data + '}'
 
-	global_id = global_id + 1
+	script.write(document)
 
-	script.write(',' + document)
+	comma = ','
 
-exit(0)
+# global_id = apple_f1_df['id'].max() + 1
 
-for i, j in shopify_f1_df.iterrows():
+# for i, j in google_f1_df.iterrows():
 
-	############ Simple cases ############
+# 	############ Simple cases ############
 
-	title = str(j[2])
-	user_rating = str(j[7])
+# 	app = str(j[0])
+# 	rating = str(j[2])
+# 	content_rating = str(j[8])
 
-	############ Complex cases ############
+# 	############ Complex cases ############
 
-	categories, prices, shopify_data = look_shopify_app(title)
+# 	categories, prices, google_data = look_google_app(app)
+# 	s_categories, s_prices, s_data = look_shopify_app(app)
 
-	document = '\n{"id":' + str(global_id) + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"name":' + title + ',"rating":' + user_rating + ',' + shopify_data + '}'
+# 	if s_categories != '':
+# 		categories + ',' + s_categories
 
-	global_id = global_id + 1
+# 	if s_prices != '':
+# 		prices + ',' + s_prices
 
-	script.write(',' + document)
+# 	if s_data != '':
+# 		s_data = ',' + s_data
+
+# 	document = ',{"id":' + str(global_id) + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"age_rating":' + content_rating + ',"name":' + app + ',"rating":' + rating + ',' + google_data + s_data + '}'
+
+# 	global_id = global_id + 1
+
+# 	script.write(document)
+
+# for i, j in shopify_f1_df.iterrows():
+
+# 	############ Simple cases ############
+
+# 	title = str(j[2])
+# 	user_rating = str(j[7])
+
+# 	############ Complex cases ############
+
+# 	categories, prices, shopify_data = look_shopify_app(title)
+
+# 	document = ',{"id":' + str(global_id) + ',"categories":[' + categories + '],"apps_price_plans":[' + prices + '],"name":' + title + ',"rating":' + user_rating + ',' + shopify_data + '}'
+
+# 	global_id = global_id + 1
+
+# 	script.write(document)
 
 
 ################################################################################################
