@@ -1,3 +1,5 @@
+# import pymongo requires pip3 install pymongo
+
 from pymongo import MongoClient
 
 # Connect with the portnumber and host

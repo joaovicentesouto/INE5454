@@ -1,6 +1,13 @@
 
 run() {
-    docker run --name cassandra-node -d -p 9042:9042 cassandra # -v $(pwd)/mnt:/mnt 
+    	if [ ! -d $(pwd)/bulk_load ];
+	then
+        echo "- volume"
+		docker run --name cassandra-node -d -p 9042:9042 cassandra
+    else
+        echo "+ volume"
+        docker run --name cassandra-node -v $(pwd)/bulk_load:/bulk_load -d -p 9042:9042 cassandra
+	fi
 }
 
 attach() {
