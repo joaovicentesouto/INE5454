@@ -187,10 +187,10 @@ def category_splitter(content, splitter):
 
 	content_vector = content.split(splitter)
 
-	categories = '"' + content_vector[0] + '"'
+	categories = '"' + str_convert(content_vector[0]) + '"'
 
 	for i in range(1, len(content_vector)):
-		categories = categories + ', "' + content_vector[i] + '"'
+		categories = categories + ', "' + str_convert(content_vector[i]) + '"'
 
 	return categories
 
@@ -217,7 +217,7 @@ def look_apple_app(app_name):
 
 	############ Complex cases for File 1 ############
 
-	categories = category_splitter(str_convert(apple_f1_df.at[row, 'prime_genre']), '&')
+	categories = category_splitter(apple_f1_df.at[row, 'prime_genre'], '&')
 
 	apple_f1_df = apple_f1_df.drop(row)
 
@@ -227,7 +227,7 @@ def look_apple_app(app_name):
 
 	app_description = str_convert(apple_f2_df.at[row, 'app_desc'])
 
-	prices = '{\n"currencies" : [\n{\n"currency" : "' + currency + '",\n"price" : ' + price + '}\n]\n}'
+	prices = '{\n"currencies" : [\n{\n"currency" : "' + currency + '",\n"price" : ' + price + '\n}\n]\n}'
 
 	apple_f2_df = apple_f2_df.drop(row)
 
@@ -259,16 +259,17 @@ def look_google_app(app_name):
 
 	############ Complex cases for File 1 ############
 
-	prices = '{"name" : "' + app_type + '",currencies: "[{"price" : ' + price + '}]}'
+	# prices = '{"name" : "' + app_type + '", "currencies" : "[{"price" : ' + price + '}]}'
+	prices = '{\n"name" : "' + app_type + '", "currencies" : [\n{\n"price" : ' + price + '\n}\n]\n}'
 
-	categories = category_splitter(str_convert(google_f1_df.at[row, "Category"]), '_and_')
-	categories = categories + ',' + category_splitter(str_convert(google_f1_df.at[row, "Genres"]), '&')
+	categories = category_splitter(google_f1_df.at[row, "Category"], '_and_')
+	categories = categories + ',' + category_splitter(google_f1_df.at[row, "Genres"], '&')
 
 	google_f1_df = google_f1_df.drop(row)
 
 	############ Final document ############
 
-	return categories, prices, '"google_apps" : {\n"version" : "' + curr_ver + '",\n"size" : "' + size + '",\n"n_of_reviews" : ' + reviews + ',\n"android_version_required" : "' + android_ver + '",\n"latest_update_at_store" : "' + last_update + '",\n"n_of_downloads" : ' + n_of_downloads + '\n}'
+	return categories, prices, '\n"google_apps" : {\n"version" : "' + curr_ver + '",\n"size" : "' + size + '",\n"n_of_reviews" : ' + reviews + ',\n"android_version_required" : "' + android_ver + '",\n"latest_update_at_store" : "' + last_update + '",\n"n_of_downloads" : ' + n_of_downloads + '\n}'
 
 def look_shopify_app(app_name):
 
@@ -313,8 +314,9 @@ def look_shopify_app(app_name):
 		for cat_id_row in range(len(rows)):
 			category_id = shopify_f2_df.at[cat_id_row, "category_id"]
 			cat_title_row = (shopify_f3_df[shopify_f3_df['id'] == category_id].index)[0]
-			categories = categories + comma + category_splitter(str_convert(shopify_f3_df.at[cat_title_row, "title"]), 'and')
+			categories = categories + comma + category_splitter(shopify_f3_df.at[cat_title_row, "title"], ' and ')
 			comma = ', '
+		print(categories)
 
 	############ Complex cases for File 4 ############
 
@@ -358,7 +360,7 @@ def look_shopify_app(app_name):
 
 	############ Final document ############
 
-	return categories, prices, '"shopify_apps" : {\n"developer" : {\n"name" : "' + developer + '",\n"link" : "' + developer_link + '"},\n"app_description" : "' + description + '",\n"app_raw_description" : "' + description_raw + '",\n"url" : "' + url + '",\n"tagline" : "' + tagline + '",\n"icon" : "' + icon + benefit_name + benefit_description + '",\n"free_trial_days" : "' + pricing_hint + '",\n"n_of_reviews" : ' + reviews_count + '\n}'
+	return categories, prices, '\n"shopify_apps" : {\n"developer" : {\n"name" : "' + developer + '",\n"link" : "' + developer_link + '"},\n"app_description" : "' + description + '",\n"app_raw_description" : "' + description_raw + '",\n"url" : "' + url + '",\n"tagline" : "' + tagline + '",\n"icon" : "' + icon + benefit_name + benefit_description + '",\n"free_trial_days" : "' + pricing_hint + '",\n"n_of_reviews" : ' + reviews_count + '\n}'
 
 
 ################################################################################################
@@ -418,52 +420,52 @@ for i, j in apple_f1_df.iterrows():
 
 	comma = ',\n'
 
-# global_id = apple_f1_df['id'].max() + 1
+global_id = apple_f1_df['id'].max() + 1
 
-# for i, j in google_f1_df.iterrows():
+for i, j in google_f1_df.iterrows():
 
-# 	############ Simple cases ############
+	############ Simple cases ############
 
-# 	app = str(j[0])
-# 	rating = str_convert(j[2])
-# 	content_rating = str_convert(j[8])
+	app = str(j[0])
+	rating = str_convert(j[2])
+	content_rating = str_convert(j[8])
 
-# 	############ Complex cases ############
+	############ Complex cases ############
 
-# 	categories, prices, google_data = look_google_app(app)
-# 	s_categories, s_prices, s_data = look_shopify_app(app)
+	categories, prices, google_data = look_google_app(app)
+	s_categories, s_prices, s_data = look_shopify_app(app)
 
-# 	if s_categories != '':
-# 		categories + ',' + s_categories
+	if s_categories != '':
+		categories + ',' + s_categories
 
-# 	if s_prices != '':
-# 		prices + ',' + s_prices
+	if s_prices != '':
+		prices + ',' + s_prices
 
-# 	if s_data != '':
-# 		s_data = ',' + s_data
+	if s_data != '':
+		s_data = ',' + s_data
 
-# 	document = ',{"id" : ' + str_convert(global_id) + ', "categories" : [' + categories + '], "apps_price_plans" : [' + prices + '], "age_rating" : ' + content_rating + ', "name" : ' + str_convert(app) + ', "rating" : ' + rating + ',' + google_data + s_data + '}'
+	document = ',\n{\n"id" : ' + str_convert(global_id) + ', "categories" : [' + categories + '], "apps_price_plans" : [' + prices + '], "age_rating" : "' + content_rating + '", "name" : "' + str_convert(app) + '", "rating" : ' + rating + ',' + google_data + s_data + '}'
 
-# 	global_id = global_id + 1
+	global_id = global_id + 1
 
-# 	script.write(document)
+	script.write(document)
 
-# for i, j in shopify_f1_df.iterrows():
+for i, j in shopify_f1_df.iterrows():
 
-# 	############ Simple cases ############
+	############ Simple cases ############
 
-# 	title = str(j[2])
-# 	user_rating = str_convert(j[7])
+	title = str(j[2])
+	user_rating = str_convert(j[7])
 
-# 	############ Complex cases ############
+	############ Complex cases ############
 
-# 	categories, prices, shopify_data = look_shopify_app(title)
+	categories, prices, shopify_data = look_shopify_app(title)
 
-# 	document = ',{"id" : ' + str_convert(global_id) + ', "categories" : [' + categories + '], "apps_price_plans" : [' + prices + '], "name" : ' + str_convert(title) + ', "rating" : ' + user_rating + ',' + shopify_data + '}'
+	document = ',\n{\n"id" : ' + str_convert(global_id) + ', "categories" : [' + categories + '], "apps_price_plans" : [' + prices + '], "name" : "' + str_convert(title) + '", "rating" : ' + str(int(user_rating)/10) + ', ' + shopify_data + '}'
 
-# 	global_id = global_id + 1
+	global_id = global_id + 1
 
-# 	script.write(document)
+	script.write(document)
 
 
 ################################################################################################
