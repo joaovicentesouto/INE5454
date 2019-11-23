@@ -116,7 +116,11 @@ shopify_file4 = '../datasets/Shopify/key_benefits.csv'
 shopify_file5 = '../datasets/Shopify/pricing_plan_features.csv'
 shopify_file6 = '../datasets/Shopify/pricing_plans.csv'
 
-script_file = './MongoDB_bulkLoad.js'
+apple_bl_filename = './scripts/apple_bulkload.js'
+google_bl_filename = './scripts/google_bulkload.js'
+shopify_bl_filename = './scripts/shopify_bulkload.js'
+
+store = [True, True, True]
 
 
 ################################################################################################
@@ -174,6 +178,8 @@ shopify_f4_df['title']   		= shopify_f4_df['title'].map(lambda x : x.lower())
 shopify_f4_df['description']	= shopify_f4_df['description'].map(lambda x : x.lower())
 
 shopify_f5_df['feature']   			= shopify_f5_df['feature'].map(lambda x : x.lower())
+
+global_id = apple_f1_df['id'].max() + 1
 
 
 ################################################################################################
@@ -257,9 +263,11 @@ def look_google_app(app_name):
 	last_update = str_convert(google_f1_df.at[row, "Last Updated"])
 	n_of_downloads = str_convert(google_f1_df.at[row, "Installs"])
 
+	if curr_ver == 'nan':
+		curr_ver = '0.0'
+
 	############ Complex cases for File 1 ############
 
-	# prices = '{"name" : "' + app_type + '", "currencies" : "[{"price" : ' + price + '}]}'
 	prices = '{\n"name" : "' + app_type + '", "currencies" : [\n{\n"price" : ' + price + '\n}\n]\n}'
 
 	categories = category_splitter(google_f1_df.at[row, "Category"], '_and_')
@@ -316,7 +324,6 @@ def look_shopify_app(app_name):
 			cat_title_row = (shopify_f3_df[shopify_f3_df['id'] == category_id].index)[0]
 			categories = categories + comma + category_splitter(shopify_f3_df.at[cat_title_row, "title"], ' and ')
 			comma = ', '
-		print(categories)
 
 	############ Complex cases for File 4 ############
 
@@ -355,7 +362,10 @@ def look_shopify_app(app_name):
 				else:
 					plan_price = plan_price + i
 
-			prices = prices + comma + '{\n"name" : "' + plan_title + '"\n"feature" : "' + plan_feature + '"\n"currencies" : [\n{\n"currency" : "' + plan_currency + '",\n"price" : ' + plan_price + '\n}\n]\n}'
+			if plan_price == '':
+				plan_price = '0'
+
+			prices = prices + comma + '{\n"name" : "' + plan_title + '",\n"feature" : "' + plan_feature + '",\n"currencies" : [\n{\n"currency" : "' + plan_currency + '",\n"price" : ' + plan_price + '\n}\n]\n}'
 			comma = ','
 
 	############ Final document ############
@@ -364,112 +374,161 @@ def look_shopify_app(app_name):
 
 
 ################################################################################################
-############ Create the bulkload script file (delete the old file if it exists) and insert the main insert command
+############ Create the bulkload script file apple apps (delete the old file if it exists)
 ################################################################################################
 
-if (os.path.isfile(script_file)):
-	os.remove(script_file)
+if store[0]:
 
-script = open(script_file, "w+")
+	print('Creating Apple bulkload')
 
-script.write('db.AppsCollection.insertMany([')
+	if (os.path.isfile(apple_bl_filename)):
+		os.remove(apple_bl_filename)
+
+	apple_script = open(apple_bl_filename, "w+")
+
+
+###############################################################################################
+########### Generate all documents for Apple apps
+###############################################################################################
+
+	comma = '\n'
+
+	for i, j in apple_f1_df.iterrows():
+
+		print('Apple', i)
+
+		apple_script.write('\ndb.apps.insert(')
+
+		############ Simple cases ############
+
+		app_id = str_convert(j[0])
+		track_name = str(j[1])
+		user_rating = str_convert(j[7])
+		cont_rating = str_convert(j[10])
+
+		############ Complex cases ############
+
+		categories, prices, apple_data = look_apple_app(track_name)
+		g_categories, g_prices, g_data = look_google_app(track_name)
+		s_categories, s_prices, s_data = look_shopify_app(track_name)
+
+		if g_categories != '':
+			categories + ',' + g_categories
+
+		if g_prices != '':
+			prices + ',' + g_prices
+
+		if g_data != '':
+			g_data = ',' + g_data
+
+		if s_categories != '':
+			categories + ',' + s_categories
+
+		if s_prices != '':
+			prices + ',' + s_prices
+
+		if s_data != '':
+			s_data = ',' + s_data
+
+		document = '\n{\n"id" : ' + app_id + ',\n"categories" : [' + categories + '],\n"apps_price_plans" : [' + prices + '],\n"age_rating" : "' + cont_rating + '",\n"name" : "' + str_convert(track_name) + '",\n"rating" : ' + user_rating + ',\n' + apple_data + g_data + s_data + '\n}'
+
+		apple_script.write(document + '\n)')
+
+
+################################################################################################
+############ Create the bulkload script file google apps (delete the old file if it exists)
+################################################################################################
+
+if store[1]:
+
+	print('Creating Google bulkload')
+
+	if (os.path.isfile(google_bl_filename)):
+		os.remove(google_bl_filename)
+
+	google_script = open(google_bl_filename, "w+")
 
 
 ################################################################################################
 ############ Generate all documents for Apple apps
 ################################################################################################
 
-comma = ''
+	for i, j in google_f1_df.iterrows():
 
-for i, j in apple_f1_df.iterrows():
+		print("Google", i)
 
-	############ Simple cases ############
+		google_script.write('\ndb.apps.insert(')
 
-	app_id = str_convert(j[0])
-	track_name = str(j[1])
-	user_rating = str_convert(j[7])
-	cont_rating = str_convert(j[10])
+		############ Simple cases ############
 
-	############ Complex cases ############
+		app = str(j[0])
+		rating = str_convert(j[2])
+		content_rating = str_convert(j[8])
 
-	categories, prices, apple_data = look_apple_app(track_name)
-	g_categories, g_prices, g_data = look_google_app(track_name)
-	s_categories, s_prices, s_data = look_shopify_app(track_name)
+		if rating == 'nan':
+			rating = '0.0'
 
-	if g_categories != '':
-		categories + ',' + g_categories
+		############ Complex cases ############
 
-	if g_prices != '':
-		prices + ',' + g_prices
+		categories, prices, google_data = look_google_app(app)
+		s_categories, s_prices, s_data = look_shopify_app(app)
 
-	if g_data != '':
-		g_data = ',' + g_data
+		if s_categories != '':
+			categories + ',' + s_categories
 
-	if s_categories != '':
-		categories + ',' + s_categories
+		if s_prices != '':
+			prices + ',' + s_prices
 
-	if s_prices != '':
-		prices + ',' + s_prices
+		if s_data != '':
+			s_data = ',' + s_data
 
-	if s_data != '':
-		s_data = ',' + s_data
+		document = '\n{\n"id" : ' + str(global_id) + ',\n"categories" : [' + categories + '],\n"apps_price_plans" : [' + prices + '],\n"age_rating" : "' + content_rating + '",\n"name" : "' + str_convert(app) + '",\n"rating" : ' + rating + ',\n' + google_data + s_data + '\n}'
 
-	document = comma + '{\n"id" : ' + app_id + ',\n"categories" : [' + categories + '],\n"apps_price_plans" : [' + prices + '],\n"age_rating" : "' + cont_rating + '",\n"name" : "' + str_convert(track_name) + '",\n"rating" : ' + user_rating + ',\n' + apple_data + g_data + s_data + '\n}'
+		global_id = global_id + 1
 
-	script.write(document)
+		google_script.write(document + '\n)')
 
-	comma = ',\n'
 
-global_id = apple_f1_df['id'].max() + 1
+################################################################################################
+############ Create the bulkload script file shopify apps (delete the old file if it exists)
+################################################################################################
 
-for i, j in google_f1_df.iterrows():
+if store[2]:
 
-	############ Simple cases ############
+	print('Creating Shopify bulkload')
 
-	app = str(j[0])
-	rating = str_convert(j[2])
-	content_rating = str_convert(j[8])
+	if (os.path.isfile(shopify_bl_filename)):
+		os.remove(shopify_bl_filename)
 
-	############ Complex cases ############
+	shopify_script = open(shopify_bl_filename, "w+")
 
-	categories, prices, google_data = look_google_app(app)
-	s_categories, s_prices, s_data = look_shopify_app(app)
 
-	if s_categories != '':
-		categories + ',' + s_categories
+################################################################################################
+############ Generate all documents for Apple apps
+################################################################################################
 
-	if s_prices != '':
-		prices + ',' + s_prices
+	for i, j in shopify_f1_df.iterrows():
 
-	if s_data != '':
-		s_data = ',' + s_data
+		print("Shopify", i)
 
-	document = ',\n{\n"id" : ' + str_convert(global_id) + ', "categories" : [' + categories + '], "apps_price_plans" : [' + prices + '], "age_rating" : "' + content_rating + '", "name" : "' + str_convert(app) + '", "rating" : ' + rating + ',' + google_data + s_data + '}'
+		shopify_script.write('\ndb.apps.insert(')
 
-	global_id = global_id + 1
+		############ Simple cases ############
 
-	script.write(document)
+		title = str(j[2])
+		user_rating = str_convert(j[7])
 
-for i, j in shopify_f1_df.iterrows():
+		############ Complex cases ############
 
-	############ Simple cases ############
+		categories, prices, shopify_data = look_shopify_app(title)
 
-	title = str(j[2])
-	user_rating = str_convert(j[7])
+		document = '\n{\n"id" : ' + str(global_id) + ',\n"categories" : [' + categories + '],\n"apps_price_plans" : [' + prices + '],\n"name" : "' + str_convert(title) + '",\n"rating" : ' + str(int(user_rating)/10) + ',\n' + shopify_data + '\n}'
 
-	############ Complex cases ############
+		global_id = global_id + 1
 
-	categories, prices, shopify_data = look_shopify_app(title)
-
-	document = ',\n{\n"id" : ' + str_convert(global_id) + ', "categories" : [' + categories + '], "apps_price_plans" : [' + prices + '], "name" : "' + str_convert(title) + '", "rating" : ' + str(int(user_rating)/10) + ', ' + shopify_data + '}'
-
-	global_id = global_id + 1
-
-	script.write(document)
+		shopify_script.write(document + '\n)')
 
 
 ################################################################################################
 ############ Ends the Mongo command
 ################################################################################################
-
-script.write('])')
