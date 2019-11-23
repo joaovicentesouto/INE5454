@@ -1,3 +1,3 @@
 {
-    "files": ["dialog.ui","test.py","mainwindow.ui","ui_dialog.py"]
+    "files": ["dialog.ui","test.py","ui_dialog.py","mainwindow.ui"]
 }
