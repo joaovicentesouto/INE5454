@@ -2,7 +2,7 @@
 import sys
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtCore import QFile
-from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtWidgets import QApplication, QMainWindow, QTableWidget, QTableWidgetItem
 
 from MongoWrapper import MongoWrapper
 from CassandraWrapper import CassandraWrapper
@@ -10,8 +10,55 @@ from CassandraWrapper import CassandraWrapper
 window = 0
 
 def runQuery():
-#    updateTable(createTable(*execQuery()))
-    print(execQuery(), flush = True)
+    # Get parameters and execute the query
+    results, stats = execQuery()
+
+    # Build the table
+    window.resultsTable.setRowCount(results.shape[0])
+    window.resultsTable.setColumnCount(results.shape[1])
+
+    header = []
+    for column in results.columns:
+        header.append(column)
+
+    window.resultsTable.setHorizontalHeaderLabels(header)
+
+    rowCount = 0
+    for i, row in results.iterrows():
+        columnCount = 0
+        for item in row:
+            window.resultsTable.setItem(rowCount, columnCount, QTableWidgetItem(str(item)))
+            columnCount += 1
+        rowCount += 1
+
+        if window.amountBox.isChecked():
+            window.amountStat.setText('Amount by store:\n      Apple Store = ' + str(stats['amounts']['apple']) + ' apps\n      Google Store = ' + str(stats['amounts']['google']) + ' apps\n      Shopify Store = ' + str(stats['amounts']['shopify']) + ' apps')
+        else:
+            window.amountStat.setText('Amount by store:')
+
+        if window.priceBox.isChecked():
+            window.priceStat.setText('Price Statistics:\n      Maximum = ' + str(stats['prices']['max']) + '\n      Minimum = ' + str(stats['prices']['min']) + '\n      Average = ' + str(stats['prices']['sum'] / stats['prices']['count']))
+        else:
+            window.priceStat.setText('Price Statistics:')
+
+        if window.associatedBox.isChecked():
+            content = 'Associated Categories:\n      '
+
+            count = 0
+            for c in ', '.join(stats['categories']):
+                if count > 110:
+                    if c == ' ' or c == ',':
+                        content = content + c + '\n      '
+                    else:
+                        content = content + c + '-\n      '
+                    count = 0
+                else:
+                    content = content + c
+                    count += 1
+
+            window.associatedStat.setText(content)
+        else:
+            window.associatedStat.setText('Associated Categories:')
 
 def execQuery():
 
@@ -34,15 +81,15 @@ def execQuery():
     min_rating = 0
     ratingText = window.ratingField.text()
     if ratingText != '' and window.ratingBox.isChecked():
-        min_rating = int(ratingText)
+        min_rating = float(ratingText)
 
-    sort = 'asc'
+    sort = True
     orderBy = None
     orderText = window.orderCombo.currentText()
     if orderText != 'none' and window.orderBox.isChecked():
         orderBy = orderText
         if  window.highLowRadio.isChecked():
-            sort = 'desc'
+            sort = False
 
     stats = []
     if window.amountBox.isChecked():
@@ -64,26 +111,12 @@ def execQuery():
         if window.negativeRadio.isChecked():
             sentiment = -1
 
+    wrapper = MongoWrapper()
+
     if not reviews:
-        wrapper = MongoWrapper()
-        return wrapper.query(names, categories, gt, min_rating, orderBy, sort, stats, [])
+        return wrapper.query(names, categories, gt, min_rating, orderBy, sort, stats, False)
 
-    print('\nNames: ', names, '\nCategories: ', categories, '\nGt: ', gt, '\nMin Rating: ', min_rating, '\nOrderby: ', orderBy, '\nSort Rule: ', sort, '\nStats: ', stats, '\nReviews: ', reviews, '\nSentiment', sentiment, flush=True)
-
-#    wrapper = MongoWrapper()
-#    ids, stats = wrapper.query(names, categories, gt, ratingText, orderText, sort, stats, ['id'])
-
-#    wrapper = CassandraWrapper()
-#    return wrapper.query(ids, gt, ratingText, orderText, sort, sentiment)
-
-#    return ids, stats
-    return [],[]
-
-def createTable(text, vector):
-    return ''
-
-def updateTable(content):
-    print(content)
+    return wrapper.query(names, categories, gt, min_rating, orderBy, sort, stats, True)
 
 if __name__ == "__main__":
     app = QApplication([])
