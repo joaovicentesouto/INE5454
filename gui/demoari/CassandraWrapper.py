@@ -11,7 +11,7 @@ class CassandraWrapper:
         self._client = Cluster(['localhost'], port=9042)
         print('Cassandra initiation: OK')
 
-    def query(self, ids, columns = None, orderby = None, sort = 'desc', sentiment = 0):
+    def query(self, ids, orderby, sortRule, sentiment):
 
             session = self._client.connect(keyspace='test')
 
@@ -22,12 +22,14 @@ class CassandraWrapper:
             # Builds WHERE argument
             ids = ', '.join(list(map(str, ids)))
 
+            print(ids, flush = True)
+
             # Performs the query
             rows = session.execute('SELECT * FROM test.reviews WHERE app_id IN (%s) ALLOW FILTERING' % (ids))
 
-            df = rows._current_rows
+            table = rows._current_rows
 
             if orderby:
-                    df = df.sort_values(by=[orderby], ascending = (sort == 'asc'))
+                table = table.sort_values(by=orderBy, ascending=sortRule, na_position='last')
 
-            return df[columns] if columns else df
+            return table

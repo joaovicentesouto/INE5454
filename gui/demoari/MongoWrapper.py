@@ -108,15 +108,16 @@ class MongoWrapper:
         counter = 0
         for doc in results:
 
-            fRating = 0.0
-            strRating = str(int(doc['rating']))
-            if len(strRating) == 1:
-                fRating = float(strRating + '.0')
-            else:
-                fRating = float(strRating[0] + '.' + strRating[1])
+            if 'rating' in doc:
+                fRating = 0.0
+                strRating = str(int(doc['rating']))
+                if len(strRating) == 1:
+                    fRating = float(strRating + '.0')
+                else:
+                    fRating = float(strRating[0] + '.' + strRating[1])
 
-            if (gt == 1 and fRating <= min_rating) or (gt == -1 and fRating >= min_rating):
-                continue
+                if (gt == 1 and fRating <= min_rating) or (gt == -1 and fRating >= min_rating):
+                    continue
 
             #----------------------------------------------------------------------------------
             # Builds app information
@@ -181,7 +182,7 @@ class MongoWrapper:
         ###################################################################################
 
         if orderBy:
-            table = table.sort_values(by=orderBy, ascending=sortRule, na_position='first')
+            table = table.sort_values(by=orderBy, ascending=sortRule, na_position='last')
 
         #----------------------------------------------------------------------------------
         # Builds app stats

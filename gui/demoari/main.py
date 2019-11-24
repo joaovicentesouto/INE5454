@@ -116,7 +116,11 @@ def execQuery():
     if not reviews:
         return wrapper.query(names, categories, gt, min_rating, orderBy, sort, stats, False)
 
-    return wrapper.query(names, categories, gt, min_rating, orderBy, sort, stats, True)
+    ids, stats = wrapper.query(names, categories, gt, min_rating, orderBy, sort, stats, True)
+
+    wrapper = CassandraWrapper()
+
+    return wrapper.query(ids, orderBy, sort, sentiment), stats
 
 if __name__ == "__main__":
     app = QApplication([])
