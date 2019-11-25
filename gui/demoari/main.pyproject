@@ -1,0 +1,3 @@
+{
+    "files": ["MongoWrapper.py","main.py","mainwindow.ui","CassandraWrapper.py"]
+}
