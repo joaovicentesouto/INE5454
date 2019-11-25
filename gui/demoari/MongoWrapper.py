@@ -142,7 +142,7 @@ class MongoWrapper:
                     row.append(np.NaN)
 
             counter += 1
-            if counter > 50:
+            if counter > 1000:
                 break
 
             # Build a new row of the table
@@ -181,7 +181,7 @@ class MongoWrapper:
         # Final verification
         ###################################################################################
 
-        if orderBy:
+        if orderBy and not reviews:
             table = table.sort_values(by=orderBy, ascending=sortRule, na_position='last')
 
         #----------------------------------------------------------------------------------
